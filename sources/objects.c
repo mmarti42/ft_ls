@@ -46,10 +46,9 @@ t_obj		*get_last(t_obj *lst)
 	return (lst);
 }
 
-t_obj		*new_obj(struct dirent *dirent, const char *str)
+t_obj		*new_obj(struct dirent *dirent, char *str)
 {
 	t_obj		*new;
-
 	if (!(new = (t_obj *)ft_memalloc(sizeof(t_obj))))
 		return (0);
 	if (dirent)
@@ -78,15 +77,19 @@ void		show_obj(t_obj *lst, t_flags *flags)
 		cur = cur->next;
 	}
 	cur = lst;
-	while (cur)
+	if (flags->R)
 	{
-		if (cur->type == DT_DIR && ft_strcmp(cur->name, ".") && ft_strcmp(cur->name, "..") && flags->R)
+		while (cur)
 		{
-			ft_putstr("\n");
-			ft_putstr(cur->path); ft_putstr(":\n");
-			show_obj(cur->content, flags);
+			if (cur->type == DT_DIR && ft_strcmp(cur->name, ".") && ft_strcmp(cur->name, ".."))
+			{
+				ft_putstr("\n");
+				ft_putstr(cur->path);
+				ft_putstr(":\n");
+				show_obj(cur->content, flags);
+			}
+			cur = cur->next;
 		}
-		cur = cur->next;
 	}
 }
 

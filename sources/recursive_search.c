@@ -32,7 +32,7 @@ void get_file_type(unsigned char type)
 		printf("Unknown");
 }
 
-static DIR				*ft_opendir(t_obj **lst, const char *str)
+static DIR				*ft_opendir(t_obj *lst, char *str)
 {
 	DIR		*dir;
 	t_obj	*cur;
@@ -42,11 +42,11 @@ static DIR				*ft_opendir(t_obj **lst, const char *str)
 		if (errno == ENOTDIR)
 		{
 
-			if (!*lst)
-				*lst = new_obj(0, str);
+			if (!lst)
+				lst = new_obj(0, str);
 			else
 			{
-				cur = get_last(*lst);
+				cur = get_last(lst);
 				cur->next = new_obj(0, str);
 			}
 			return (0);
@@ -58,51 +58,45 @@ static DIR				*ft_opendir(t_obj **lst, const char *str)
 	return (dir);
 }
 
-static t_obj			*recursive_search(t_obj **lst, char *str, t_flags *flags)
+static void	recursive_search(t_flags *flags, char *cur_dir)
 {
-	DIR				*dir;
-	struct dirent	*dirent;
-	t_obj			*cur;
-
-	cur = 0;
-	if (!(dir = ft_opendir(lst, str)))
-		return (0);
-	while ((dirent = readdir(dir)))
-	{
-
-		if (cur == 0 && !(!flags->a && dirent->d_name[0] == '.'))
-		{
-			*lst = new_obj(dirent, str);
-			cur = *lst;
-		}
-		else if (cur && !(!flags->a && dirent->d_name[0] == '.'))
-		{
-			cur->next = new_obj(dirent, str);
-			cur = cur->next;
-		}
-		if (cur && flags->R && cur->type == DT_DIR && ft_strcmp(cur->name, CUR_DIR) != 0 && ft_strcmp(cur->name, PREV_DIR) != 0)
-			recursive_search(&cur->content, ft_namejoin(str, cur->name), flags);
-	}
-	closedir(dir);
-	return (*lst);
-}
-
-t_obj			*search(int dir, char **argv, t_flags *flags)
-{
-	t_obj	*lst;
-	int		i;
+	DIR *dir;
+	t_obj *lst;
+	struct dirent *dirent;
+	t_obj *tmp;
 
 	lst = 0;
-	i = 0;
-	if (!dir)
-		recursive_search(&lst, ".", flags);
-	else
+	tmp = 0;
+	if (!(dir = ft_opendir(lst, cur_dir)))
+		return ;
+	while ((dirent = readdir(dir)))
 	{
-		while (i < dir)
+		if (!(flags->a) && dirent->d_name[0] == '.')
+			continue ;
+		if (!lst)
 		{
-			recursive_search(&lst, argv[i], flags);
-			++i;
+			lst = new_obj(dirent, cur_dir);
+			tmp = lst;
 		}
+		else
+		{
+			lst->next = new_obj(dirent, cur_dir);
+			lst = lst->next;
+		}
+		if (flags->R && lst->type == DT_DIR)
+			recursive_search(flags, lst->path);
 	}
-	return (lst);
+	show_obj(tmp, flags);
+}
+
+t_obj			*search(t_flags *flags)
+{
+	while (*(flags->dirs))
+	{
+		recursive_search(flags, *(flags->dirs));
+		//show_obj(lst, flags);
+		write(1, "\n", 1);
+		flags->dirs++;
+	}
+	return 0;
 }

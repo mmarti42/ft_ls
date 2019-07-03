@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   err.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lshellie <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmarti <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/13 17:21:51 by lshellie          #+#    #+#             */
-/*   Updated: 2019/04/18 15:06:47 by lshellie         ###   ########.fr       */
+/*   Created: 2019/07/03 19:20:50 by mmarti            #+#    #+#             */
+/*   Updated: 2019/07/03 19:20:52 by mmarti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "unistd.h"
+#include "../headers/ft_ls.h"
 
-void	ft_putstr(char const *s)
+int error(char c)
 {
-	write(1, s, ft_strlen(s));
+	ft_putstr(badFlag);
+	ft_putchar(c);
+	ft_putstr(usage);
+	return (-1);
 }
