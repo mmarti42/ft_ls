@@ -68,28 +68,12 @@ t_obj		*new_obj(struct dirent *dirent, char *str)
 
 void		show_obj(t_obj *lst, t_flags *flags)
 {
-	t_obj *cur;
-
-	cur = lst;
-	while (cur)
+	if (!lst)
+		return;
+	while (lst)
 	{
-		ft_putendl(cur->name);
-		cur = cur->next;
-	}
-	cur = lst;
-	if (flags->R)
-	{
-		while (cur)
-		{
-			if (cur->type == DT_DIR && ft_strcmp(cur->name, ".") && ft_strcmp(cur->name, ".."))
-			{
-				ft_putstr("\n");
-				ft_putstr(cur->path);
-				ft_putstr(":\n");
-				show_obj(cur->content, flags);
-			}
-			cur = cur->next;
-		}
+		ft_putendl(lst->name);
+		lst = lst->next;
 	}
 }
 

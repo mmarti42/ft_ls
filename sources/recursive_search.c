@@ -86,6 +86,9 @@ static void	recursive_search(t_flags *flags, char *cur_dir)
 		if (flags->R && lst->type == DT_DIR)
 			recursive_search(flags, lst->path);
 	}
+	write(1, "\n", 1);
+	ft_putstr(cur_dir);
+	write(1, ":\n", 2);
 	show_obj(tmp, flags);
 }
 
@@ -95,7 +98,6 @@ t_obj			*search(t_flags *flags)
 	{
 		recursive_search(flags, *(flags->dirs));
 		//show_obj(lst, flags);
-		write(1, "\n", 1);
 		flags->dirs++;
 	}
 	return 0;
