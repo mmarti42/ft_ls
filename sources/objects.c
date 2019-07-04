@@ -66,15 +66,48 @@ t_obj		*new_obj(struct dirent *dirent, char *str)
 	return (new);
 }
 
+//char *format_stats(char *name, stat *buf)
+//{
+//	char *res;
+//}
+
+t_obj *objcpy(t_obj *lst)
+{
+	t_obj *tmp;
+
+	if (!(tmp = (t_obj *)malloc(sizeof(t_obj))))
+		return (0);
+	tmp->next = 0;
+	tmp->name = lst->name;
+	tmp->path = lst->path;
+	tmp->type = lst->type;
+	free(lst);
+	return (tmp);
+}
+
 void		show_obj(t_obj *lst, t_flags *flags)
 {
+	struct stat buf;
+
 	if (!lst)
-		return;
-	while (lst)
+		return ;
+	if (!(flags->l))
 	{
-		ft_putendl(lst->name);
-		lst = lst->next;
+		while (lst)
+		{
+			ft_putendl(lst->name);
+			lst = lst->next;
+		}
 	}
+//	else
+//	{
+//		while (lst)
+//		{
+//			lstat(lst->path, &buf);
+//			ft_putstr(format_stats(lst->name, &buf));
+//			lst = lst->next;
+//		}
+//	}
 }
 
 void		free_obj(t_obj *lst)
@@ -86,8 +119,6 @@ void		free_obj(t_obj *lst)
 	cur = lst;
 	while (cur)
 	{
-		if (cur->content)
-			free_obj(cur->content);
 		free(cur->name);
 		free(cur->path);
 		tmp = cur;

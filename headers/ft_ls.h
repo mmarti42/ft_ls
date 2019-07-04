@@ -25,12 +25,10 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <dirent.h>
+#include <time.h>
 
 # include <stdlib.h>
 # include "../libft/libft.h"
-
-# define CUR_DIR "."
-# define PREV_DIR ".."
 
 typedef struct			s_flags
 {
@@ -44,21 +42,12 @@ typedef struct			s_flags
 
 typedef struct			s_object
 {
-	size_t				links;
 	char 				*path;
 	char				*name;
 	u_int8_t			type;
-	int	 				*rights;
-	char				*group;
-	char 				*master;
-	size_t 				*size;
-	char				*Date;
 	struct s_object		*next;
-	struct s_object		*content;
 }						t_obj;
 
-int						set_options(int argc, char **argv, t_flags *flags);
-int						ft_ls_main(int argc, char **argv, t_flags *flags);
 t_obj					*new_obj(struct dirent *dirent, char *str);
 void					free_obj(t_obj *lst);
 t_obj					*get_last(t_obj *lst);
@@ -66,5 +55,6 @@ void					show_obj(t_obj *lst, t_flags *flags);
 char					*ft_namejoin(char const *s1, char const *s2);
 t_obj					*search(t_flags *flags);
 int 					error(char c);
+t_obj					*objcpy(t_obj *lst);
 
 #endif

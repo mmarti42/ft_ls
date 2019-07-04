@@ -83,9 +83,10 @@ static void	recursive_search(t_flags *flags, char *cur_dir)
 			lst->next = new_obj(dirent, cur_dir);
 			lst = lst->next;
 		}
-		if (flags->R && lst->type == DT_DIR)
+		if (flags->R && lst->type == DT_DIR && ft_strcmp(lst->name, ".") && ft_strcmp(lst->name, ".."))
 			recursive_search(flags, lst->path);
 	}
+	closedir(dir);
 	write(1, "\n", 1);
 	ft_putstr(cur_dir);
 	write(1, ":\n", 2);
@@ -97,7 +98,6 @@ t_obj			*search(t_flags *flags)
 	while (*(flags->dirs))
 	{
 		recursive_search(flags, *(flags->dirs));
-		//show_obj(lst, flags);
 		flags->dirs++;
 	}
 	return 0;
