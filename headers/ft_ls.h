@@ -30,31 +30,40 @@
 # include <stdlib.h>
 # include "../libft/libft.h"
 
-typedef struct			s_flags
-{
-	int 				R;
-	int 				r;
-	int 				a;
-	int 				t;
-	int 				l;
-	char				**dirs;
-}						t_flags;
+int	a;
+int	l;
+int	R;
+int	r;
+int	t;
 
 typedef struct			s_object
 {
+	unsigned short		mod;
+	int					links;
+	unsigned int		master;
+	unsigned int		group;
+	long 				size;
+	long				time;
 	char 				*path;
 	char				*name;
 	u_int8_t			type;
-	struct s_object		*next;
+	struct s_object		*left;
+	struct s_object		*right;
 }						t_obj;
 
-t_obj					*new_obj(struct dirent *dirent, char *str);
+long					lstcmpt(t_obj *lst1, t_obj *lst2);
+int						lstcmpn(t_obj *lst1, t_obj *lst2);
+int						lstcmpnrev(t_obj *lst1, t_obj*lst2);
+long					lstcmptrev(t_obj *lst1, t_obj *lst2);
+t_obj					*new_obj(struct dirent *dirent, char *str, struct stat *stbuf);
 void					free_obj(t_obj *lst);
 t_obj					*get_last(t_obj *lst);
-void					show_obj(t_obj *lst, t_flags *flags);
+//void					show_obj(t_obj *lst, t_flags *flags);
 char					*ft_namejoin(char const *s1, char const *s2);
-t_obj					*search(t_flags *flags);
+//t_obj					*search(t_flags *flags);
 int 					error(char c);
-t_obj					*objcpy(t_obj *lst);
+void					*objcpy(t_obj *lst);
+void					by_name(t_obj *lbegin, t_obj* lcurr);
+void					by_time(t_obj *lbegin, t_obj* lcurr);
 
 #endif

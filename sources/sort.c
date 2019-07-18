@@ -12,46 +12,38 @@
 
 #include "../headers/ft_ls.h"
 
-void	bubble_sort(t_obj *lst)
+void	by_time(t_obj *lbegin, t_obj* lcurr)
 {
-	int i;
 	t_obj *tmp;
 
-	i = -1;
-	if (!lst)
-		return ;
-	while (++i < 5 && lst)
+	while (lbegin)
 	{
-		tmp = lst->next;
-		if (ft_strcmp(lst->name, tmp->name) > 0)
-		{
-			lst->next = tmp;
-			tmp->next = lst;
-		}
-		lst = lst->next;
+		tmp = lbegin;
+		if (lcurr->time < lbegin->time)
+			lbegin = lbegin->left;
+		else
+			lbegin = lbegin->right;
 	}
-	bubble_sort(lst);
+	if (lcurr->time < tmp->time)
+		tmp->left = lcurr;
+	else
+		tmp->right = lcurr;
 }
 
-t_obj	*skip(t_obj *lst, int i)
+void	by_name(t_obj *lbegin, t_obj* lcurr)
 {
-	while (i--)
+	t_obj *tmp;
+
+	while (lbegin)
 	{
-		if (!lst)
-			return (0);
-		lst = lst->next;
+		tmp = lbegin;
+		if (ft_strcmp(lbegin->name, lcurr->name))
+			lbegin = lbegin->left;
+		else
+			lbegin = lbegin->right;
 	}
-	return (lst);
+	if (ft_strcmp(lbegin->name, lcurr->name))
+		tmp->left = lcurr;
+	else
+		tmp->right = lcurr;
 }
-
-t_obj *merge(t_obj *lst1, t_obj *lst2, int i)
-{
-	//todo
-}
-
-void	sort(t_obj *lst, int i)
-{
-	//todo
-}
-
-

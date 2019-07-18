@@ -46,9 +46,10 @@ t_obj		*get_last(t_obj *lst)
 	return (lst);
 }
 
-t_obj		*new_obj(struct dirent *dirent, char *str)
+t_obj		*new_obj(struct dirent *dirent, char *str, struct stat *stbuf)
 {
 	t_obj		*new;
+
 	if (!(new = (t_obj *)ft_memalloc(sizeof(t_obj))))
 		return (0);
 	if (dirent)
@@ -63,51 +64,21 @@ t_obj		*new_obj(struct dirent *dirent, char *str)
 		new->path = ft_strdup(str);
 		new->type = -1;
 	}
+	new->mod = stbuf->st_mode;
+	new->links = stbuf->st_nlink;
+	new->master = stbuf->st_uid;
+	new->group = stbuf->st_gid;
+	new->time = stbuf->st_mtimespec.tv_nsec;
 	return (new);
 }
 
-//char *format_stats(char *name, stat *buf)
-//{
-//	char *res;
-//}
-
-t_obj *objcpy(t_obj *lst)
+void		show_obj(t_obj *lst)
 {
 	t_obj *tmp;
 
-	if (!(tmp = (t_obj *)malloc(sizeof(t_obj))))
-		return (0);
-	tmp->next = 0;
-	tmp->name = lst->name;
-	tmp->path = lst->path;
-	tmp->type = lst->type;
-	free(lst);
-	return (tmp);
-}
-
-void		show_obj(t_obj *lst, t_flags *flags)
-{
-	struct stat buf;
-
 	if (!lst)
 		return ;
-	if (!(flags->l))
-	{
-		while (lst)
-		{
-			ft_putendl(lst->name);
-			lst = lst->next;
-		}
-	}
-//	else
-//	{
-//		while (lst)
-//		{
-//			lstat(lst->path, &buf);
-//			ft_putstr(format_stats(lst->name, &buf));
-//			lst = lst->next;
-//		}
-//	}
+
 }
 
 void		free_obj(t_obj *lst)

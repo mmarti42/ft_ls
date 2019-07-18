@@ -12,38 +12,27 @@
 
 #include "../headers/ft_ls.h"
 
-static	t_flags		*init_flags(t_flags *flags)
-{
-	flags->a = 0;
-	flags->l = 0;
-	flags->R = 0;
-	flags->r = 0;
-	flags->t = 0;
-	flags->dirs = 0;
-	return (flags);
-}
-
-static	int setFlags(t_flags *flags, char *av)
+static	int setFlags(char *av)
 {
 	while (*++av)
 	{
 		if (*av != 'a' && *av != 'l' && *av != 'R' && *av != 'r' && *av != 't')
 			return (error(*av));
 		if (*av == 'a')
-			flags->a = 1;
+			a = 1;
 		else if (*av == 'l')
-			flags->l = 1;
+			l = 1;
 		else if (*av == 'R')
-			flags->R = 1;
+			R = 1;
 		else if (*av == 'r')
-			flags->r = 1;
+			r = 1;
 		else if (*av == 't')
-			flags->t = 1;
+			t = 1;
 	}
 	return (0);
 }
 
-static	int	getFlags(t_flags *flags, char **av)
+static	int	getFlags(char **av)
 {
 	int i;
 
@@ -52,7 +41,7 @@ static	int	getFlags(t_flags *flags, char **av)
 	{
 		if (av[i][0] == '-')
 		{
-			if (setFlags(flags, av[i]) < 0)
+			if (setFlags(av[i]) < 0)
 				return (-1);
 		}
 		else
@@ -61,37 +50,59 @@ static	int	getFlags(t_flags *flags, char **av)
 	return (0);
 }
 
-static	void	getDirs(t_flags *flags, char **argv, int argc, int start)
+t_obj *rec(struct stat *stbuf, t_obj *files, char *av)
 {
-	int i;
+	t_obj *flist;
 
-	i = 0;
-	if (start == 0)
+	flist = 0;
+	if (!files)
 	{
-		flags->dirs = (char **)malloc(sizeof(char *) * 2);
-		(flags->dirs)[i++] = ".";
+		files = new_obj(0, av);
+		flist = files;
 	}
 	else
 	{
-		flags->dirs = (char **)ft_memalloc(sizeof(char *) * argc - start + 1);
-		while (argv[start])
-			(flags->dirs)[i++] = argv[start++];
+		if (t)
+			by_time(flist, new_obj(0, av, stbuf));
+		else
+			by_name(flist, new_obj(0, av, stbuf));
 	}
-	(flags->dirs)[i] = 0;
+	return (flist);
+}
+
+void getFiles(char **argv, int dirs)
+{
+	struct stat stbuf;
+	t_obj *files;
+
+	files = 0;
+	if (dirs == 0)
+		return ;
+	while (argv[dirs])
+	{
+		if (lstat(argv[dirs], &stbuf) < 0)
+			write(1, "No such file or directory\n", 26);
+		else
+		{
+			if (S_ISREG(stbuf.st_mode) > 0)
+			{
+				rec(&stbuf, files, argv[dirs]);
+				argv[dirs] = 0;
+			}
+		}
+		dirs++;
+	}
+	show
 }
 
 int			main(int argc, char **argv)
 {
-	int dirs;
-	t_flags	flags;
-	t_obj	*result;
+	int endfl;
 
-	dirs = getFlags(init_flags(&flags), argv);
-	if (dirs < 0)
+	endfl = getFlags(argv);
+	if (endfl < 0)
 		return (-1);
 	else
-		getDirs(&flags, argv, argc, dirs);
-	result = search(&flags);
-	//show_obj(result);
+		getFiles(argv, endfl);
 	return (0);
 }

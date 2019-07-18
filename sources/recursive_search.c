@@ -32,7 +32,7 @@ void get_file_type(unsigned char type)
 		printf("Unknown");
 }
 
-static DIR				*ft_opendir(t_obj *lst, char *str)
+static DIR				*ft_opendir(t_obj **lst, char *str)
 {
 	DIR		*dir;
 	t_obj	*cur;
@@ -41,12 +41,11 @@ static DIR				*ft_opendir(t_obj *lst, char *str)
 	{
 		if (errno == ENOTDIR)
 		{
-
-			if (!lst)
-				lst = new_obj(0, str);
+			if (!*lst)
+				*lst = new_obj(0, str);
 			else
 			{
-				cur = get_last(lst);
+				cur = get_last(*lst);
 				cur->next = new_obj(0, str);
 			}
 			return (0);
@@ -67,7 +66,7 @@ static void	recursive_search(t_flags *flags, char *cur_dir)
 
 	lst = 0;
 	tmp = 0;
-	if (!(dir = ft_opendir(lst, cur_dir)))
+	if (!(dir = ft_opendir(&lst, cur_dir)))
 		return ;
 	while ((dirent = readdir(dir)))
 	{
