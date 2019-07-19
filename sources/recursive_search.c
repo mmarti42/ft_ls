@@ -32,30 +32,19 @@ void get_file_type(unsigned char type)
 		printf("Unknown");
 }
 
-//static DIR				*ft_opendir(t_obj **lst, char *str)
-//{
-//	DIR		*dir;
-//	t_obj	*cur;
-//
-//	if (!(dir = opendir(str)))
-//	{
-//		if (errno == ENOTDIR)
-//		{
-//			if (!*lst)
-//				*lst = new_obj(0, str);
-//			else
-//			{
-//				cur = get_last(*lst);
-//				cur->next = new_obj(0, str);
-//			}
-//			return (0);
-//		}
-//		ft_putstr(strerror(errno));
-//		ft_putchar('\n');
-//		return (0);
-//	}
-//	return (dir);
-//}
+static DIR				*ft_opendir(char *str)
+{
+	DIR		*dir;
+	t_obj	*cur;
+
+	if (!(dir = opendir(str)))
+	{
+		ft_putstr(strerror(errno));
+		ft_putchar('\n');
+		return (0);
+	}
+	return (dir);
+}
 
 //static void	recursive_search(t_flags *flags, char *cur_dir)
 //{
@@ -92,12 +81,19 @@ void get_file_type(unsigned char type)
 //	show_obj(tmp, flags);
 //}
 
-//t_obj			*search(t_flags *flags)
+//t_obj			*search(t_dirs *dirs)
 //{
-//	while (*(flags->dirs))
+//	DIR				*dir;
+//	struct dirent	*dirent;
+//
+//	while (dirs)
 //	{
-//		recursive_search(flags, *(flags->dirs));
-//		flags->dirs++;
+//		if(!(dir = ft_opendir(dirs->dir)))
+//		{
+//			dirs = dirs->next;
+//			continue ;
+//		}
+//		if (R)
 //	}
 //	return 0;
 //}

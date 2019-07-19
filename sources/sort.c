@@ -12,6 +12,26 @@
 
 #include "../headers/ft_ls.h"
 
+int setFlags(char *av)
+{
+	while (*++av)
+	{
+		if (*av != 'a' && *av != 'l' && *av != 'R' && *av != 'r' && *av != 't')
+			return (error(*av));
+		if (*av == 'a')
+			a = 1;
+		else if (*av == 'l')
+			l = 1;
+		else if (*av == 'R')
+			R = 1;
+		else if (*av == 'r')
+			r = 1;
+		else if (*av == 't')
+			t = 1;
+	}
+	return (0);
+}
+
 void	by_time(t_obj *lbegin, t_obj* lcurr)
 {
 	t_obj *tmp;

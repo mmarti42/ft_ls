@@ -12,27 +12,7 @@
 
 #include "../headers/ft_ls.h"
 
-static	int setFlags(char *av)
-{
-	while (*++av)
-	{
-		if (*av != 'a' && *av != 'l' && *av != 'R' && *av != 'r' && *av != 't')
-			return (error(*av));
-		if (*av == 'a')
-			a = 1;
-		else if (*av == 'l')
-			l = 1;
-		else if (*av == 'R')
-			R = 1;
-		else if (*av == 'r')
-			r = 1;
-		else if (*av == 't')
-			t = 1;
-	}
-	return (0);
-}
-
-static	int	getFlags(char **av)
+int			get_flags(char **av)
 {
 	int i;
 
@@ -50,7 +30,7 @@ static	int	getFlags(char **av)
 	return (0);
 }
 
-t_obj *rec(struct stat *stbuf, t_obj *files, char *av)
+t_obj		*rec(struct stat *stbuf, t_obj *files, char *av)
 {
 	t_obj *flist;
 
@@ -71,36 +51,63 @@ t_obj *rec(struct stat *stbuf, t_obj *files, char *av)
 	return (flist);
 }
 
-void getFiles(char **argv, int dirs)
+t_dirs		*recdirs(char *str, t_dirs *dirs)
 {
-	struct stat stbuf;
-	t_obj *files;
+	t_dirs *tmp;
 
+	if (!(tmp = (t_dirs *)malloc(sizeof(t_dirs))))
+		return (0);
+	tmp->dir = strdup(str);
+	if (!dirs)
+		return (tmp);
+	while (dirs->next)
+		dirs = dirs->next;
+	dirs->next = tmp;
+	return (dirs);
+}
+
+t_dirs		*get_files(char **argv, int endfl)
+{
+	struct stat	stbuf;
+	t_obj		*files;
+	t_dirs		*dirs;
+
+	dirs = 0;
 	files = 0;
-	if (dirs == 0)
-		return ;
-	while (argv[dirs])
+	if (endfl == -1)
+		return (0);
+	while (argv[++endfl])
 	{
-		if (lstat(argv[dirs], &stbuf) < 0)
+		if (lstat(argv[endfl], &stbuf) < 0)
 			write(1, "No such file or directory\n", 26);
 		else
 		{
-			if (S_ISREG(stbuf.st_mode) > 0)
-				files = rec(&stbuf, files, argv[dirs]);
+			if (S_ISDIR(stbuf.st_mode) == 0)
+				files = rec(&stbuf, files, argv[endfl]);
+			else
+				dirs = recdirs(argv[endfl], dirs);
 		}
-		dirs++;
 	}
-	show_obj(files);
+	if (r)
+		show_objrev(files);
+	else
+		show_obj(files);
+	return (dirs);
 }
 
 int			main(int argc, char **argv)
 {
-	int endfl;
+	int		endfl;
+	t_dirs	*dirs;
 
-	endfl = getFlags(argv);
+	dirs = 0;
+	endfl = get_flags(argv);
 	if (endfl < 0)
 		return (-1);
 	else
-		getFiles(argv, endfl);
+		dirs = get_files(argv, endfl - 1);
+	if (!dirs)
+		dirs = recdirs(".", dirs);
+	//search(dirs);
 	return (0);
 }

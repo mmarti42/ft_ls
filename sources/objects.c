@@ -44,6 +44,7 @@ void get_stats(t_obj* new, struct stat *stbuf)
 	new->master = stbuf->st_uid;
 	new->group = stbuf->st_gid;
 	new->time = stbuf->st_mtimespec.tv_nsec;
+	new->blocks = stbuf->st_blocks;
 }
 
 t_obj		*new_obj(struct dirent *dirent, char *str, struct stat *stbuf)
@@ -79,12 +80,20 @@ void	write_name(t_obj* lst)
 
 void		show_obj(t_obj *lst)
 {
-	t_obj *tmp;
 	if (!lst)
 		return ;
 	show_obj(lst->left);
 	write_name(lst);
 	show_obj(lst->right);
+}
+
+void		show_objrev(t_obj *lst)
+{
+	if (!lst)
+		return ;
+	show_objrev(lst->right);
+	write_name(lst);
+	show_objrev(lst->left);
 }
 
 //void		free_obj(t_obj *lst)
