@@ -57,7 +57,7 @@ t_obj *rec(struct stat *stbuf, t_obj *files, char *av)
 	flist = 0;
 	if (!files)
 	{
-		files = new_obj(0, av);
+		files = new_obj(0, av, stbuf);
 		flist = files;
 	}
 	else
@@ -65,7 +65,8 @@ t_obj *rec(struct stat *stbuf, t_obj *files, char *av)
 		if (t)
 			by_time(flist, new_obj(0, av, stbuf));
 		else
-			by_name(flist, new_obj(0, av, stbuf));
+			by_name(files, new_obj(0, av, stbuf));
+		return (files);
 	}
 	return (flist);
 }
@@ -85,14 +86,11 @@ void getFiles(char **argv, int dirs)
 		else
 		{
 			if (S_ISREG(stbuf.st_mode) > 0)
-			{
-				rec(&stbuf, files, argv[dirs]);
-				argv[dirs] = 0;
-			}
+				files = rec(&stbuf, files, argv[dirs]);
 		}
 		dirs++;
 	}
-	show
+	show_obj(files);
 }
 
 int			main(int argc, char **argv)

@@ -37,13 +37,13 @@ char	*ft_namejoin(char const *s1, char const *s2)
 	return (str);
 }
 
-t_obj		*get_last(t_obj *lst)
+void get_stats(t_obj* new, struct stat *stbuf)
 {
-	if (!lst)
-		return (0);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
+	new->mod = stbuf->st_mode;
+	new->links = stbuf->st_nlink;
+	new->master = stbuf->st_uid;
+	new->group = stbuf->st_gid;
+	new->time = stbuf->st_mtimespec.tv_nsec;
 }
 
 t_obj		*new_obj(struct dirent *dirent, char *str, struct stat *stbuf)
@@ -64,36 +64,42 @@ t_obj		*new_obj(struct dirent *dirent, char *str, struct stat *stbuf)
 		new->path = ft_strdup(str);
 		new->type = -1;
 	}
-	new->mod = stbuf->st_mode;
-	new->links = stbuf->st_nlink;
-	new->master = stbuf->st_uid;
-	new->group = stbuf->st_gid;
-	new->time = stbuf->st_mtimespec.tv_nsec;
+	if (stbuf)
+		get_stats(new, stbuf);
 	return (new);
+}
+
+void	write_name(t_obj* lst)
+{
+	if (!lst)
+		return ;
+	write(1, lst->name, ft_strlen(lst->name));
+	write(1, "\n", 1);
 }
 
 void		show_obj(t_obj *lst)
 {
 	t_obj *tmp;
-
 	if (!lst)
 		return ;
-
+	show_obj(lst->left);
+	write_name(lst);
+	show_obj(lst->right);
 }
 
-void		free_obj(t_obj *lst)
-{
-	t_obj	*cur;
-	t_obj	*tmp;
-	if (!lst)
-		return ;
-	cur = lst;
-	while (cur)
-	{
-		free(cur->name);
-		free(cur->path);
-		tmp = cur;
-		free(tmp);
-		cur = cur->next;
-	}
-}
+//void		free_obj(t_obj *lst)
+//{
+//	t_obj	*cur;
+//	t_obj	*tmp;
+//	if (!lst)
+//		return ;
+//	cur = lst;
+//	while (cur)
+//	{
+//		free(cur->name);
+//		free(cur->path);
+//		tmp = cur;
+//		free(tmp);
+//		cur = cur->next;
+//	}
+//}

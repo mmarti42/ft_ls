@@ -37,12 +37,12 @@ void	by_name(t_obj *lbegin, t_obj* lcurr)
 	while (lbegin)
 	{
 		tmp = lbegin;
-		if (ft_strcmp(lbegin->name, lcurr->name))
+		if (ft_strcmp(lbegin->name, lcurr->name) > 0)
 			lbegin = lbegin->left;
 		else
 			lbegin = lbegin->right;
 	}
-	if (ft_strcmp(lbegin->name, lcurr->name))
+	if (ft_strcmp(tmp->name, lcurr->name) > 0)
 		tmp->left = lcurr;
 	else
 		tmp->right = lcurr;
