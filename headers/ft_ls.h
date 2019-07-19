@@ -30,16 +30,23 @@
 # include <stdlib.h>
 # include "../libft/libft.h"
 
-int	a;
-int	l;
-int	R;
-int	r;
-int	t;
+int	g_a;
+int	g_l;
+int	g_R;
+int	g_r;
+int	g_t;
+
+typedef struct s_dirs
+{
+	char			*dir;
+	struct s_dirs	*next;
+}					t_dirs;
 
 typedef struct			s_object
 {
 	unsigned short		mod;
 	int					links;
+	int					blocks;
 	unsigned int		master;
 	unsigned int		group;
 	long 				size;
@@ -51,19 +58,17 @@ typedef struct			s_object
 	struct s_object		*right;
 }						t_obj;
 
-long					lstcmpt(t_obj *lst1, t_obj *lst2);
-int						lstcmpn(t_obj *lst1, t_obj *lst2);
-int						lstcmpnrev(t_obj *lst1, t_obj*lst2);
-long					lstcmptrev(t_obj *lst1, t_obj *lst2);
 t_obj					*new_obj(struct dirent *dirent, char *str, struct stat *stbuf);
 void					free_obj(t_obj *lst);
 t_obj					*get_last(t_obj *lst);
-//void					show_obj(t_obj *lst, t_flags *flags);
 char					*ft_namejoin(char const *s1, char const *s2);
 //t_obj					*search(t_flags *flags);
 int 					error(char c);
 void					*objcpy(t_obj *lst);
 void					by_name(t_obj *lbegin, t_obj* lcurr);
 void					by_time(t_obj *lbegin, t_obj* lcurr);
+void					show_obj(t_obj *lst);
+void					show_objrev(t_obj *lst);
+int						setFlags(char *av);
 
 #endif

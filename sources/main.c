@@ -42,7 +42,7 @@ t_obj		*rec(struct stat *stbuf, t_obj *files, char *av)
 	}
 	else
 	{
-		if (t)
+		if (g_t)
 			by_time(flist, new_obj(0, av, stbuf));
 		else
 			by_name(files, new_obj(0, av, stbuf));
@@ -88,7 +88,7 @@ t_dirs		*get_files(char **argv, int endfl)
 				dirs = recdirs(argv[endfl], dirs);
 		}
 	}
-	if (r)
+	if (g_r)
 		show_objrev(files);
 	else
 		show_obj(files);

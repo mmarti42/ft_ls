@@ -19,15 +19,15 @@ int setFlags(char *av)
 		if (*av != 'a' && *av != 'l' && *av != 'R' && *av != 'r' && *av != 't')
 			return (error(*av));
 		if (*av == 'a')
-			a = 1;
+			g_a = 1;
 		else if (*av == 'l')
-			l = 1;
+			g_l = 1;
 		else if (*av == 'R')
-			R = 1;
+			g_R = 1;
 		else if (*av == 'r')
-			r = 1;
+			g_r = 1;
 		else if (*av == 't')
-			t = 1;
+			g_t = 1;
 	}
 	return (0);
 }
