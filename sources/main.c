@@ -66,7 +66,7 @@ t_dirs		*recdirs(char *str, t_dirs *dirs)
 	return (dirs);
 }
 
-t_dirs		*get_files(char **argv, int endfl)
+t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *)))
 {
 	struct stat	stbuf;
 	t_obj		*files;
@@ -88,10 +88,7 @@ t_dirs		*get_files(char **argv, int endfl)
 				dirs = recdirs(argv[endfl], dirs);
 		}
 	}
-	if (g_r)
-		show_objrev(files);
-	else
-		show_obj(files);
+	show(files);
 	return (dirs);
 }
 
@@ -99,15 +96,21 @@ int			main(int argc, char **argv)
 {
 	int		endfl;
 	t_dirs	*dirs;
+	void(*sort) (t_obj*, t_obj*);
+	void(*show) (t_obj*);
 
-	dirs = 0;
+	argc = 0;
 	endfl = get_flags(argv);
+	get_pointers(&sort, &show);
 	if (endfl < 0)
 		return (-1);
-	else
-		dirs = get_files(argv, endfl - 1);
+	dirs = get_files(argv, endfl - 1, show);
 	if (!dirs)
 		dirs = recdirs(".", dirs);
-	//search(dirs);
+	while (dirs)
+	{
+		search(dirs->dir, sort, show);
+		dirs = dirs->next;
+	}
 	return (0);
 }

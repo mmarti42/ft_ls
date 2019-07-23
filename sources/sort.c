@@ -12,6 +12,18 @@
 
 #include "../headers/ft_ls.h"
 
+void get_pointers(void(**sort)(t_obj*, t_obj*), void (**show)(t_obj*))
+{
+	if (g_r)
+		*show = &show_objrev;
+	else
+		*show = &show_obj;
+	if (g_t)
+		*sort = &by_time;
+	else
+		*sort = &by_name;
+}
+
 int setFlags(char *av)
 {
 	while (*++av)

@@ -12,30 +12,29 @@
 
 #include "../headers/ft_ls.h"
 
-void get_file_type(unsigned char type)
-{
-	if (type == DT_BLK)
-		printf("Block device");
-	else if (type == DT_DIR)
-		printf("Directory");
-	else if (type == DT_CHR)
-		printf("Character device");
-	else if (type == DT_FIFO)
-		printf("FIFO");
-	else if (type == DT_REG)
-		printf("File");
-	else if (type == DT_SOCK)
-		printf("local domain socket");
-	else if (type == DT_LNK)
-		printf("Symbolic link");
-	else if (type == DT_UNKNOWN)
-		printf("Unknown");
-}
+//void get_file_type(unsigned char type)
+//{
+//	if (type == DT_BLK)
+//		printf("Block device");
+//	else if (type == DT_DIR)
+//		printf("Directory");
+//	else if (type == DT_CHR)
+//		printf("Character device");
+//	else if (type == DT_FIFO)
+//		printf("FIFO");
+//	else if (type == DT_REG)
+//		printf("File");
+//	else if (type == DT_SOCK)
+//		printf("local domain socket");
+//	else if (type == DT_LNK)
+//		printf("Symbolic link");
+//	else if (type == DT_UNKNOWN)
+//		printf("Unknown");
+//}
 
 static DIR				*ft_opendir(char *str)
 {
 	DIR		*dir;
-	t_obj	*cur;
 
 	if (!(dir = opendir(str)))
 	{
@@ -46,54 +45,46 @@ static DIR				*ft_opendir(char *str)
 	return (dir);
 }
 
-//static void	recursive_search(t_flags *flags, char *cur_dir)
-//{
-//	DIR *dir;
-//	t_obj *lst;
-//	struct dirent *dirent;
-//	t_obj *tmp;
-//
-//	lst = 0;
-//	tmp = 0;
-//	if (!(dir = ft_opendir(&lst, cur_dir)))
-//		return ;
-//	while ((dirent = readdir(dir)))
-//	{
-//		if (!(flags->a) && dirent->d_name[0] == '.')
-//			continue ;
-//		if (!lst)
-//		{
-//			lst = new_obj(dirent, cur_dir);
-//			tmp = lst;
-//		}
-//		else
-//		{
-//			lst->next = new_obj(dirent, cur_dir);
-//			lst = lst->next;
-//		}
-//		if (flags->R && lst->type == DT_DIR && ft_strcmp(lst->name, ".") && ft_strcmp(lst->name, ".."))
-//			recursive_search(flags, lst->path);
-//	}
-//	closedir(dir);
-//	write(1, "\n", 1);
-//	ft_putstr(cur_dir);
-//	write(1, ":\n", 2);
-//	show_obj(tmp, flags);
-//}
+t_obj *recursive_search(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
+		void (*show)(t_obj*))
+{
+	struct dirent *dirent;
+	t_obj *lst;
+	t_obj *curr;
+	struct stat *stbuf;
 
-//t_obj			*search(t_dirs *dirs)
-//{
-//	DIR				*dir;
-//	struct dirent	*dirent;
-//
-//	while (dirs)
-//	{
-//		if(!(dir = ft_opendir(dirs->dir)))
-//		{
-//			dirs = dirs->next;
-//			continue ;
-//		}
-//		if (R)
-//	}
-//	return 0;
-//}
+	stbuf = 0;
+	lst = 0;
+	curr = 0;
+	while ((dirent = readdir(dir)))
+	{
+		if (!g_a && dirent->d_name[0] == '.')
+			continue;
+		if (g_l)
+			lstat(dirent->d_name, stbuf);
+		if (!lst)
+			lst = new_obj(dirent, cur_dir, stbuf);
+		else
+		{
+			curr = new_obj(dirent, cur_dir, stbuf);
+			sort(lst, curr);
+		}
+		if (g_R && curr && curr->type == DT_DIR && ft_strcmp(curr->name, ".")
+		&& ft_strcmp(curr->name, ".."))
+			search(curr->path, sort, show);
+	}
+	closedir(dir);
+	return (lst);
+}
+
+void search(char *dirname, void(sort(t_obj*, t_obj*)), void(show(t_obj*)))
+{
+	DIR		*dir;
+	t_obj*	lst;
+
+	if (!(dir = ft_opendir(dirname)))
+		return ;
+	lst = recursive_search(dir, dirname, sort, show);
+	show(lst);
+	write(1, "\n", 1);
+}
