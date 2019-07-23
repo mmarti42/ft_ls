@@ -12,28 +12,21 @@
 
 #include "../headers/ft_ls.h"
 
-char	*ft_namejoin(char const *s1, char const *s2)
+char	*ft_namejoin(char *s1, char *s2)
 {
-	unsigned int	len1;
-	unsigned int	len2;
 	char			*str;
-	unsigned int	len;
 	unsigned int	i;
 
 	i = 0;
 	if (s1 == 0 || s2 == 0)
 		return (0);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	len = len1 + len2 + 2;
-	if (!(str = (char *)ft_memalloc(sizeof(str) * len)))
+	if (!(str = (char *)ft_memalloc(ft_strlen(s1) + ft_strlen(s2) + 2)))
 		return (0);
-	while (i < len1)
+	while (*s1)
 		str[i++] = *s1++;
 	str[i++] = '/';
-	while (i < len)
+	while (*s2)
 		str[i++] = *s2++;
-	str[len] = 0;
 	return (str);
 }
 

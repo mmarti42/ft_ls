@@ -61,7 +61,7 @@ typedef struct			s_object
 t_obj					*new_obj(struct dirent *dirent, char *str, struct stat *stbuf);
 void					free_obj(t_obj *lst);
 t_obj					*get_last(t_obj *lst);
-char					*ft_namejoin(char const *s1, char const *s2);
+char					*ft_namejoin(char *s1, char *s2);
 void					search(char *dir_name, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*));
 int 					error(char c);
 void					*objcpy(t_obj *lst);

@@ -55,7 +55,6 @@ t_obj *recursive_search(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
 
 	stbuf = 0;
 	lst = 0;
-	curr = 0;
 	while ((dirent = readdir(dir)))
 	{
 		if (!g_a && dirent->d_name[0] == '.')
@@ -63,7 +62,10 @@ t_obj *recursive_search(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
 		if (g_l)
 			lstat(dirent->d_name, stbuf);
 		if (!lst)
+		{
 			lst = new_obj(dirent, cur_dir, stbuf);
+			curr = lst;
+		}
 		else
 		{
 			curr = new_obj(dirent, cur_dir, stbuf);
@@ -77,7 +79,7 @@ t_obj *recursive_search(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
 	return (lst);
 }
 
-void search(char *dirname, void(sort(t_obj*, t_obj*)), void(show(t_obj*)))
+void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
 {
 	DIR		*dir;
 	t_obj*	lst;
@@ -85,6 +87,8 @@ void search(char *dirname, void(sort(t_obj*, t_obj*)), void(show(t_obj*)))
 	if (!(dir = ft_opendir(dirname)))
 		return ;
 	lst = recursive_search(dir, dirname, sort, show);
+	write(1, dirname, ft_strlen(dirname));
+	write(1, ":\n", 2);
 	show(lst);
 	write(1, "\n", 1);
 }
