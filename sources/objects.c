@@ -24,7 +24,8 @@ char	*ft_namejoin(char *s1, char *s2)
 		return (0);
 	while (*s1)
 		str[i++] = *s1++;
-	str[i++] = '/';
+	if (*--s1 != '/')
+	    str[i++] = '/';
 	while (*s2)
 		str[i++] = *s2++;
 	return (str);
@@ -36,7 +37,7 @@ void get_stats(t_obj* new, struct stat *stbuf)
 	new->links = stbuf->st_nlink;
 	new->master = stbuf->st_uid;
 	new->group = stbuf->st_gid;
-	new->time = stbuf->st_mtimespec.tv_sec;
+	//new->time = stbuf->st_mtimespec.tv_sec;
 	new->blocks = stbuf->st_blocks;
 	new->size = stbuf->st_size;
 }

@@ -64,7 +64,6 @@ t_obj					*get_last(t_obj *lst);
 char					*ft_namejoin(char *s1, char *s2);
 void					search(char *dir_name, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*));
 int 					error(char c);
-void					*objcpy(t_obj *lst);
 void					by_name(t_obj *lbegin, t_obj* lcurr);
 void					by_time(t_obj *lbegin, t_obj* lcurr);
 void					show_obj(t_obj *lst);

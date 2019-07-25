@@ -38,6 +38,12 @@ static DIR				*ft_opendir(char *str)
 
 	if (!(dir = opendir(str)))
 	{
+	    if (errno == EACCES)
+        {
+	        write(1, "ls: ", 4);
+	        ft_putstr(str);
+	        write(1, ": ", 2);
+        }
 		ft_putstr(strerror(errno));
 		ft_putchar('\n');
 		return (0);
@@ -45,7 +51,7 @@ static DIR				*ft_opendir(char *str)
 	return (dir);
 }
 
-t_obj *recursive_search(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
+t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
 		void (*show)(t_obj*))
 {
 	struct dirent *dirent;
@@ -71,12 +77,24 @@ t_obj *recursive_search(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
 			curr = new_obj(dirent, cur_dir, stbuf);
 			sort(lst, curr);
 		}
-		if (g_R && curr && curr->type == DT_DIR && ft_strcmp(curr->name, ".")
-		&& ft_strcmp(curr->name, ".."))
-			search(curr->path, sort, show);
 	}
 	closedir(dir);
 	return (lst);
+}
+
+void get_dir(t_obj* lst, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
+{
+    if (!lst)
+        return ;
+    get_dir(lst->left, sort, show);
+    if (g_R && lst->type == DT_DIR && ft_strcmp(lst->name, ".")
+        && ft_strcmp(lst->name, ".."))
+    {
+        ft_putstr(lst->path);
+        write(1, "\n", 1);
+        search(lst->path, sort, show);
+    }
+    get_dir(lst->right, sort, show);
 }
 
 void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
@@ -86,9 +104,8 @@ void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
 
 	if (!(dir = ft_opendir(dirname)))
 		return ;
-	lst = recursive_search(dir, dirname, sort, show);
-	write(1, dirname, ft_strlen(dirname));
-	write(1, ":\n", 2);
+	lst = ft_readdir(dir, dirname, sort, show);
 	show(lst);
 	write(1, "\n", 1);
+	get_dir(lst, sort, show);
 }
