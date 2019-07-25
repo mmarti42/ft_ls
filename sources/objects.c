@@ -91,19 +91,13 @@ void		show_objrev(t_obj *lst)
 	show_objrev(lst->left);
 }
 
-//void		free_obj(t_obj *lst)
-//{
-//	t_obj	*cur;
-//	t_obj	*tmp;
-//	if (!lst)
-//		return ;
-//	cur = lst;
-//	while (cur)
-//	{
-//		free(cur->name);
-//		free(cur->path);
-//		tmp = cur;
-//		free(tmp);
-//		cur = cur->next;
-//	}
-//}
+void		free_obj(t_obj *lst)
+{
+	if (!lst)
+		return ;
+	free_obj(lst->left);
+	free_obj(lst->right);
+	free(lst->name);
+	free(lst->path);
+	free(lst);
+}

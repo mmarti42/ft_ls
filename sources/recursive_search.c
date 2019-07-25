@@ -68,10 +68,7 @@ t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*),
 		if (g_l)
 			lstat(dirent->d_name, stbuf);
 		if (!lst)
-		{
 			lst = new_obj(dirent, cur_dir, stbuf);
-			curr = lst;
-		}
 		else
 		{
 			curr = new_obj(dirent, cur_dir, stbuf);
@@ -108,4 +105,5 @@ void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
 	show(lst);
 	write(1, "\n", 1);
 	get_dir(lst, sort, show);
+	free_obj(lst);
 }
