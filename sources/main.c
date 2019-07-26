@@ -55,9 +55,10 @@ t_dirs		*recdirs(char *str, t_dirs *dirs)
 {
 	t_dirs *tmp;
 
-	if (!(tmp = (t_dirs *)malloc(sizeof(t_dirs))))
+	if (!(tmp = (t_dirs *)ft_memalloc(sizeof(t_dirs))))
 		return (0);
 	tmp->dir = strdup(str);
+	tmp->next = 0;
 	if (!dirs)
 		return (tmp);
 	while (dirs->next)

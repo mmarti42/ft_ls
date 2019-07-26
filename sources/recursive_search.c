@@ -12,26 +12,6 @@
 
 #include "../headers/ft_ls.h"
 
-//void get_file_type(unsigned char type)
-//{
-//	if (type == DT_BLK)
-//		printf("Block device");
-//	else if (type == DT_DIR)
-//		printf("Directory");
-//	else if (type == DT_CHR)
-//		printf("Character device");
-//	else if (type == DT_FIFO)
-//		printf("FIFO");
-//	else if (type == DT_REG)
-//		printf("File");
-//	else if (type == DT_SOCK)
-//		printf("local domain socket");
-//	else if (type == DT_LNK)
-//		printf("Symbolic link");
-//	else if (type == DT_UNKNOWN)
-//		printf("Unknown");
-//}
-
 static DIR				*ft_opendir(char *str)
 {
 	DIR		*dir;
@@ -98,7 +78,6 @@ void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
 		return ;
 	lst = ft_readdir(dir, dirname, sort);
 	show(lst);
-	write(1, "\n", 1);
 	get_dir(lst, sort, show);
 	free_obj(lst);
 }

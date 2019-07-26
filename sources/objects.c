@@ -34,13 +34,15 @@ char	*ft_namejoin(char *s1, char *s2)
 void get_stats(t_obj* new)
 {
     struct stat stbuf;
-    lstat(new->name, &stbuf);
+    lstat(new->path, &stbuf);
 
+    new->time = stbuf.st_mtimespec.tv_sec;
+    if (!g_l)
+		return ;
 	new->mod = stbuf.st_mode;
 	new->links = stbuf.st_nlink;
 	new->master = stbuf.st_uid;
 	new->group = stbuf.st_gid;
-//	new->time = stbuf.st_mtimespec.tv_sec;
 	new->blocks = stbuf.st_blocks;
 	new->size = stbuf.st_size;
 }
@@ -63,7 +65,9 @@ t_obj		*new_obj(struct dirent *dirent, char *str)
 		new->path = ft_strdup(str);
 		new->type = -1;
 	}
-	if (g_l)
+	new->left = 0;
+	new->right = 0;
+	if (g_l || g_t)
 		get_stats(new);
 	return (new);
 }

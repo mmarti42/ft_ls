@@ -51,12 +51,12 @@ void	by_time(t_obj *lbegin, t_obj* lcurr)
 	while (lbegin)
 	{
 		tmp = lbegin;
-		if (lcurr->time < lbegin->time)
+		if (lcurr->time > lbegin->time)
 			lbegin = lbegin->left;
 		else
 			lbegin = lbegin->right;
 	}
-	if (lcurr->time < tmp->time)
+	if (lcurr->time > tmp->time)
 		tmp->left = lcurr;
 	else
 		tmp->right = lcurr;
