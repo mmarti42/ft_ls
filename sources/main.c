@@ -30,22 +30,22 @@ int			get_flags(char **av)
 	return (0);
 }
 
-t_obj		*rec(struct stat *stbuf, t_obj *files, char *av)
+t_obj		*rec(t_obj *files, char *av)
 {
 	t_obj *flist;
 
 	flist = 0;
 	if (!files)
 	{
-		files = new_obj(0, av, stbuf);
+		files = new_obj(0, av);
 		flist = files;
 	}
 	else
 	{
 		if (g_t)
-			by_time(flist, new_obj(0, av, stbuf));
+			by_time(flist, new_obj(0, av));
 		else
-			by_name(files, new_obj(0, av, stbuf));
+			by_name(files, new_obj(0, av));
 		return (files);
 	}
 	return (flist);
@@ -83,7 +83,7 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *)))
 		else
 		{
 			if (S_ISDIR(stbuf.st_mode) == 0)
-				files = rec(&stbuf, files, argv[endfl]);
+				files = rec(files, argv[endfl]);
 			else
 				dirs = recdirs(argv[endfl], dirs);
 		}

@@ -55,21 +55,18 @@ t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*))
 {
 	struct dirent *dirent;
 	t_obj *lst;
-	t_obj *curr;
-	struct stat stbuf;
+	t_obj *curr;;
 
 	lst = 0;
 	while ((dirent = readdir(dir)))
 	{
 		if (!g_a && dirent->d_name[0] == '.')
 			continue;
-		if (g_l)
-			lstat(dirent->d_name, &stbuf);
 		if (!lst)
-			lst = new_obj(dirent, cur_dir, &stbuf);
+			lst = new_obj(dirent, cur_dir);
 		else
 		{
-			curr = new_obj(dirent, cur_dir, &stbuf);
+			curr = new_obj(dirent, cur_dir);
 			sort(lst, curr);
 		}
 	}

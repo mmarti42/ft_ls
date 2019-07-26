@@ -58,7 +58,7 @@ typedef struct			s_object
 	struct s_object		*right;
 }						t_obj;
 
-t_obj					*new_obj(struct dirent *dirent, char *str, struct stat *stbuf);
+t_obj					*new_obj(struct dirent *dirent, char *str);
 void					free_obj(t_obj *lst);
 char					*ft_namejoin(char *s1, char *s2);
 void					search(char *dir_name, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*));
