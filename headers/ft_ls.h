@@ -35,6 +35,7 @@ int	g_l;
 int	g_R;
 int	g_r;
 int	g_t;
+int g_f;
 
 typedef struct s_dirs
 {
@@ -69,5 +70,6 @@ void					show_obj(t_obj *lst);
 void					show_objrev(t_obj *lst);
 int						setFlags(char *av);
 void					get_pointers(void(**sort)(t_obj*, t_obj*), void(**show)(t_obj*));
+void					show_not_sorted(t_obj* lst);
 
 #endif

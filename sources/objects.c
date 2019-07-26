@@ -98,6 +98,15 @@ void		show_objrev(t_obj *lst)
 	show_objrev(lst->left);
 }
 
+void show_not_sorted(t_obj* lst)
+{
+	while (lst)
+	{
+		write_name(lst);
+		lst = lst->right;
+	}
+}
+
 void		free_obj(t_obj *lst)
 {
 	if (!lst)

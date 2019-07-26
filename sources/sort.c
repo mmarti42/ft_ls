@@ -12,24 +12,10 @@
 
 #include "../headers/ft_ls.h"
 
-void get_pointers(void(**sort)(t_obj*, t_obj*), void (**show)(t_obj*))
-{
-	if (g_r)
-		*show = &show_objrev;
-	else
-		*show = &show_obj;
-	if (g_t)
-		*sort = &by_time;
-	else
-		*sort = &by_name;
-}
-
 int setFlags(char *av)
 {
 	while (*++av)
 	{
-		if (*av != 'a' && *av != 'l' && *av != 'R' && *av != 'r' && *av != 't')
-			return (error(*av));
 		if (*av == 'a')
 			g_a = 1;
 		else if (*av == 'l')
@@ -40,6 +26,13 @@ int setFlags(char *av)
 			g_r = 1;
 		else if (*av == 't')
 			g_t = 1;
+		else if (*av == 'f')
+		{
+			g_f = 1;
+			g_a = 1;
+		}
+		else
+			return (error(*av));
 	}
 	return (0);
 }
@@ -78,4 +71,30 @@ void	by_name(t_obj *lbegin, t_obj* lcurr)
 		tmp->left = lcurr;
 	else
 		tmp->right = lcurr;
+}
+
+void not_sort(t_obj* lbegin, t_obj* lcurr)
+{
+	while (lbegin->right)
+	{
+		lbegin = lbegin->right;
+	}
+	lbegin->right = lcurr;
+}
+
+void get_pointers(void(**sort)(t_obj*, t_obj*), void (**show)(t_obj*))
+{
+	if (g_r)
+		*show = &show_objrev;
+	else
+		*show = &show_obj;
+	if (g_t)
+		*sort = &by_time;
+	else
+		*sort = &by_name;
+	if (g_f)
+	{
+		*sort = &not_sort;
+		*show = &show_not_sorted;
+	}
 }

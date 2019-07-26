@@ -93,12 +93,27 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *)))
 	return (dirs);
 }
 
+void free_lst(t_dirs* lst)
+{
+	t_dirs* tmp;
+
+	tmp = lst;
+	while (tmp)
+	{
+		tmp = lst->next;
+		free(lst->dir);
+		free(lst);
+		lst = tmp;
+	}
+}
+
 int			main(int argc, char **argv)
 {
 	int		endfl;
 	t_dirs	*dirs;
-	void(*sort) (t_obj*, t_obj*);
-	void(*show) (t_obj*);
+	void(*sort)(t_obj*, t_obj*);
+	void(*show)(t_obj*);
+	t_dirs* tmp;
 
 	argc = 0;
 	endfl = get_flags(argv);
@@ -108,10 +123,12 @@ int			main(int argc, char **argv)
 	dirs = get_files(argv, endfl - 1, show);
 	if (!dirs)
 		dirs = recdirs(".", dirs);
+	tmp = dirs;
 	while (dirs)
 	{
 		search(dirs->dir, sort, show);
 		dirs = dirs->next;
 	}
+	free_lst(tmp);
 	return (0);
 }

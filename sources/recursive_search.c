@@ -35,7 +35,7 @@ t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*))
 {
 	struct dirent *dirent;
 	t_obj *lst;
-	t_obj *curr;;
+	t_obj *curr;
 
 	lst = 0;
 	while ((dirent = readdir(dir)))
