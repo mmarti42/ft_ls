@@ -60,7 +60,7 @@ t_obj		*new_obj(struct dirent *dirent, char *str, struct stat *stbuf)
 		new->path = ft_strdup(str);
 		new->type = -1;
 	}
-	if (stbuf)
+	if (stbuf->st_size)
 		get_stats(new, stbuf);
 	return (new);
 }
