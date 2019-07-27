@@ -51,7 +51,9 @@ void		get_stats(t_obj* new, t_column *col) ////!!!!!!!!!!!!
 		new->maj = convert_maj(stbuf.st_rdev);
 		new->min = convert_min(stbuf.st_rdev);
 	}
-	new->time_str = convert_time(new->time);
+	new->time_year = convert_year(new->time);
+	new->time_day = convert_day(new->time);
+	new->time_month = convert_month(new->time);
 	if (new->mod[0] == 'l')
 		new->linked_file = convert_linked_file(new->path);
 	if (col)
@@ -85,17 +87,20 @@ t_obj		*new_obj(struct dirent *dirent, char *str, t_column *col) ////!!!!!!!!!!!
 
 void	write_long(t_obj *lst, t_column *col)
 {
-	ft_printf("%s %*s", lst->mod, col->links, lst->links);
-	ft_printf(" %-*s %-*s",col->master, lst->master, col->group, lst->group);
-	if (!lst->size)
-		ft_printf(" %*s, %*s",col->maj, lst->maj, col->min, lst->min);
-	else
-		ft_printf(" %*s",col->size, lst->size);
-	ft_printf(" %s", lst->time_str);
-	ft_printf(" %s", lst->name);
-	if (lst->linked_file)
-		ft_printf(" -> %s", lst->linked_file);
-	ft_printf("\n");
+	if (col)
+	{
+		ft_printf("%s %*s", lst->mod, col->links, lst->links);
+		ft_printf(" %-*s %-*s", col->master, lst->master, col->group, lst->group);
+		if (!lst->size)
+			ft_printf(" %*s, %*s", col->maj, lst->maj, col->min, lst->min);
+		else
+			ft_printf(" %*s", col->size, lst->size);
+		ft_printf(" %s %*s %*s", lst->time_month, col->time_day, lst->time_day, col->time_year, lst->time_year);
+		ft_printf(" %s", lst->name);
+		if (lst->linked_file)
+			ft_printf(" -> %s", lst->linked_file);
+		ft_printf("\n");
+	}
 }
 
 void	write_name(t_obj *lst, t_column *col)
@@ -145,7 +150,9 @@ void		free_obj(t_obj *lst)
 	free(lst->path);
 	free(lst->linked_file);
 	free(lst->mod);
-	free(lst->time_str);
+	free(lst->time_year);
+	free(lst->time_month);
+	free(lst->time_day);
 	free(lst->size);
 	free(lst->min);
 	free(lst->maj);

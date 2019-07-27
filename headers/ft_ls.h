@@ -58,7 +58,9 @@ typedef struct			s_object
 	char 				*maj;
 	char 				*min;
 	char 				*size;
-	char 				*time_str;
+	char 				*time_year;
+	char				*time_month;
+	char				*time_day;
 	char				*name;
 	char 				*linked_file;
 
@@ -77,7 +79,8 @@ typedef struct			s_column
 	int 				maj;
 	int 				min;
 	int 				size;
-	int 				time;
+	int 				time_year;
+	int 				time_day;
 	int 				name;
 }						t_column;
 
@@ -97,15 +100,16 @@ void					show_not_sorted(t_obj* lst, t_column *col);
 void			set_columns(t_obj *lst, t_column *col);
 t_column		*new_column();
 
-char	*convert_perm(unsigned short mod);
-char	*convert_links(int links);
-char	*convert_uid(unsigned int uid);
-char	*convert_gid(unsigned int gid);
-char	*convert_time(long t);
+char		*convert_perm(unsigned short mod);
+char		*convert_links(int links);
+char		*convert_uid(unsigned int uid);
+char 		*convert_gid(unsigned int gid);
 char		*convert_min(dev_t dev);
 char		*convert_maj(dev_t dev);
-char 	*convert_size(long size);
+char		*convert_size(long size);
 char 		*convert_linked_file(char *path);
-char	*ft_strjoin_sym(char const *s1, char const *s2, char c);
+char 		*convert_year(long t);
+char 		*convert_month(long t);
+char 		*convert_day(long t);
 
 #endif

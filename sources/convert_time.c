@@ -14,48 +14,41 @@
 
 # define HALF_YEAR 15778463
 
-char 	*cut_hours(char *str)
+void		ft_free(char **str)
 {
 	int i;
-	int j;
-	char *tmp;
 
 	i = 0;
-	j = 0;
 	while (str[i])
 	{
-		if (str[i] == ':')
-			++j;
-		if (j == 2)
-			str[i] = 0;
+		free(str[i]);
 		++i;
 	}
-	tmp = ft_strdup(str);
-	return (tmp);
+	free(str);
 }
 
-char	*ft_strjoin_sym(char const *s1, char const *s2, char c)
+char 		*convert_month(long t)
 {
-	unsigned int	len1;
-	unsigned int	len2;
-	char			*str;
-	unsigned int	len;
-	unsigned int	i;
+	char 	*str;
+	char 	**tmp;
+	char 	*ttime;
 
-	i = 0;
-	if (s1 == 0 || s2 == 0)
-		return (0);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	len = len1 + len2 + 2;
-	if (!(str = (char *)ft_memalloc(sizeof(str) * len)))
-		return (0);
-	while (i < len1)
-		str[i++] = *s1++;
-	str[i++] = c;
-	while (i < len)
-		str[i++] = *s2++;
-	str[len] = 0;
+	ttime = ctime(&t);
+	tmp = ft_strsplit(ttime, ' ');
+	str = ft_strdup(tmp[1]);
+	ft_free(tmp);
+	return (str);
+}
+char 		*convert_day(long t)
+{
+	char 	*str;
+	char 	**tmp;
+	char 	*ttime;
+
+	ttime = ctime(&t);
+	tmp = ft_strsplit(ttime, ' ');
+	str = ft_strdup(tmp[2]);
+	ft_free(tmp);
 	return (str);
 }
 
@@ -72,37 +65,32 @@ char 	*get_year(char **tmp)
 	return (ret);
 }
 
-char	*cut_date(char *year, char **tmp)
+char	*cut_noyear(char *tmp)
 {
-	char	*t;
-	char	*str;
-	char	*hours;
+	char 	*str;
+	int 	i;
+	int 	j;
 
-	str = ft_strdup(tmp[1]);
-	str = ft_strjoin_sym(str, tmp[2], ' ');
-	if (year)
+	j = 0;
+	i = 0;
+	while (tmp[i] != 0)
 	{
-		t = str;
-		str = ft_strjoin_sym(str, year, ' ');
-		free(t);
+		if (tmp[i] == ':')
+			++j;
+		if (j == 2)
+			tmp[i] = 0;
+		++i;
 	}
-	else
-	{
-		t = str;
-		hours = cut_hours(tmp[3]);
-		str = ft_strjoin_sym(str, hours, ' ');
-		free(hours);
-		free(t);
-	}
+	str = ft_strdup(tmp);
 	return (str);
 }
 
-char	*convert_time(long t)
+char	*convert_year(long t)
 {
 	char *str;
 	long cur_time;
-	char *year;
 	char **tmp;
+	char *year;
 
 	year = 0;
 	tmp = ft_strsplit(ctime(&t), ' ');
@@ -117,6 +105,10 @@ char	*convert_time(long t)
 		if (cur_time - t > HALF_YEAR)
 			year = get_year(tmp);
 	}
-	str = cut_date(year, tmp);
+	if (!year)
+		str = cut_noyear(tmp[3]);
+	else
+		str = year;
+	ft_free(tmp);
 	return (str);
 }
