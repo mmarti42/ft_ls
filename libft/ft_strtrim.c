@@ -3,40 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lshellie <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abartole <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/16 18:09:37 by lshellie          #+#    #+#             */
-/*   Updated: 2019/04/18 20:42:35 by lshellie         ###   ########.fr       */
+/*   Created: 2018/12/05 23:48:35 by abartole          #+#    #+#             */
+/*   Updated: 2018/12/06 00:01:34 by abartole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
 
-char	*ft_strtrim(char const *s)
+static int	ft_isspace(int c)
 {
-	char			*str;
-	unsigned int	start;
-	unsigned int	end;
-	unsigned int	i;
+	return (c == ' ' || c == '\t' || c == '\n');
+}
 
-	i = 0;
-	start = 0;
-	if (s == 0)
-		return (0);
-	end = ft_strlen(s);
-	while (s[start] != 0 && (s[start] == ' ' || s[start] == '\t'
-				|| s[start] == '\n'))
-		start++;
-	while (end != start && (s[end] == ' '
-				|| s[end] == '\t' || s[end] == '\n' || s[end] == 0))
-		end--;
-	i = end - start;
-	if (!(str = (char *)malloc(sizeof(*s) * (i + 1))))
+char		*ft_strtrim(char const *s)
+{
+	unsigned int	i;
+	size_t			len;
+	char			*new;
+
+	if (!s)
 		return (0);
 	i = 0;
-	while (s[i] != 0 && start <= end)
-		str[i++] = s[start++];
-	str[i] = 0;
-	return (str);
+	while (ft_isspace(s[i]))
+		i++;
+	len = ft_strlen(s) - 1;
+	while (len > i && ft_isspace(s[len]))
+		len--;
+	while (len < i)
+		return (new = ft_strdup(""));
+	return (new = ft_strsub(s, i, len - (size_t)i + 1));
 }

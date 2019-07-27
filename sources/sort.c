@@ -82,7 +82,7 @@ void not_sort(t_obj* lbegin, t_obj* lcurr)
 	lbegin->right = lcurr;
 }
 
-void get_pointers(void(**sort)(t_obj*, t_obj*), void (**show)(t_obj*))
+void get_pointers(void(**sort)(t_obj*, t_obj*), void (**show)(t_obj*,t_column*))
 {
 	if (g_r)
 		*show = &show_objrev;

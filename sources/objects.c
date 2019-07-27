@@ -31,23 +31,34 @@ char	*ft_namejoin(char *s1, char *s2)
 	return (str);
 }
 
-void get_stats(t_obj* new)
+void		get_stats(t_obj* new, t_column *col) ////!!!!!!!!!!!!
 {
     struct stat stbuf;
-    lstat(new->path, &stbuf);
 
+    lstat(new->path, &stbuf);
     new->time = stbuf.st_mtimespec.tv_sec;
     if (!g_l)
 		return ;
-	new->mod = stbuf.st_mode;
-	new->links = stbuf.st_nlink;
-	new->master = stbuf.st_uid;
-	new->group = stbuf.st_gid;
-	new->blocks = stbuf.st_blocks;
-	new->size = stbuf.st_size;
+    new->blocks = stbuf.st_blocks;
+	new->mod = convert_perm(stbuf.st_mode);
+	new->links = convert_links(stbuf.st_nlink);
+	new->master = convert_uid(stbuf.st_uid);
+	new->group = convert_gid(stbuf.st_gid);
+	if (new->mod[0] != 'c' && new->mod[0] != 'b')
+		new->size = convert_size(stbuf.st_size);
+	else
+	{
+		new->maj = convert_maj(stbuf.st_rdev);
+		new->min = convert_min(stbuf.st_rdev);
+	}
+	new->time_str = convert_time(new->time);
+	if (new->mod[0] == 'l')
+		new->linked_file = convert_linked_file(new->path);
+	if (col)
+		set_columns(new, col);
 }
 
-t_obj		*new_obj(struct dirent *dirent, char *str)
+t_obj		*new_obj(struct dirent *dirent, char *str, t_column *col) ////!!!!!!!!!!!!!
 {
 	t_obj		*new;
 
@@ -68,41 +79,58 @@ t_obj		*new_obj(struct dirent *dirent, char *str)
 	new->left = 0;
 	new->right = 0;
 	if (g_l || g_t)
-		get_stats(new);
+		get_stats(new, col);
 	return (new);
 }
 
-void	write_name(t_obj* lst)
+void	write_long(t_obj *lst, t_column *col)
+{
+	ft_printf("%s %*s", lst->mod, col->links, lst->links);
+	ft_printf(" %-*s %-*s",col->master, lst->master, col->group, lst->group);
+	if (!lst->size)
+		ft_printf(" %*s, %*s",col->maj, lst->maj, col->min, lst->min);
+	else
+		ft_printf(" %*s",col->size, lst->size);
+	ft_printf(" %s", lst->time_str);
+	ft_printf(" %s", lst->name);
+	if (lst->linked_file)
+		ft_printf(" -> %s", lst->linked_file);
+	ft_printf("\n");
+}
+
+void	write_name(t_obj *lst, t_column *col)
 {
 	if (!lst)
 		return ;
-	write(1, lst->name, ft_strlen(lst->name));
-	write(1, "\n", 1);
+	if (g_l)
+		write_long(lst, col);
+	else
+		ft_printf("%s\n", lst->name);
 }
 
-void		show_obj(t_obj *lst)
+void		show_obj(t_obj *lst, t_column *col)
 {
 	if (!lst)
 		return ;
-	show_obj(lst->left);
-	write_name(lst);
-	show_obj(lst->right);
+	show_obj(lst->left, col);
+	write_name(lst, col);
+	show_obj(lst->right, col);
 }
 
-void		show_objrev(t_obj *lst)
+void		show_objrev(t_obj *lst, t_column *col)
 {
 	if (!lst)
 		return ;
-	show_objrev(lst->right);
-	write_name(lst);
-	show_objrev(lst->left);
+	show_objrev(lst->right, col);
+	write_name(lst, col);
+	show_objrev(lst->left, col);
 }
 
-void show_not_sorted(t_obj* lst)
+void show_not_sorted(t_obj* lst, t_column *col)
 {
 	while (lst)
 	{
-		write_name(lst);
+		write_name(lst, col);
 		lst = lst->right;
 	}
 }
@@ -115,5 +143,14 @@ void		free_obj(t_obj *lst)
 	free_obj(lst->right);
 	free(lst->name);
 	free(lst->path);
+	free(lst->linked_file);
+	free(lst->mod);
+	free(lst->time_str);
+	free(lst->size);
+	free(lst->min);
+	free(lst->maj);
+	free(lst->master);
+	free(lst->group);
+	free(lst->links);
 	free(lst);
 }

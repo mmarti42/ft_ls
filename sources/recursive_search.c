@@ -31,7 +31,7 @@ static DIR				*ft_opendir(char *str)
 	return (dir);
 }
 
-t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*))
+t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*), t_column *col)
 {
 	struct dirent *dirent;
 	t_obj *lst;
@@ -43,10 +43,10 @@ t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*))
 		if (!g_a && dirent->d_name[0] == '.')
 			continue;
 		if (!lst)
-			lst = new_obj(dirent, cur_dir);
+			lst = new_obj(dirent, cur_dir, col);
 		else
 		{
-			curr = new_obj(dirent, cur_dir);
+			curr = new_obj(dirent, cur_dir, col);
 			sort(lst, curr);
 		}
 	}
@@ -54,7 +54,7 @@ t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*))
 	return (lst);
 }
 
-void get_dir(t_obj* lst, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
+void get_dir(t_obj* lst, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_column*))
 {
     if (!lst)
         return ;
@@ -69,15 +69,17 @@ void get_dir(t_obj* lst, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
     get_dir(lst->right, sort, show);
 }
 
-void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*))
+void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_column*))
 {
-	DIR		*dir;
-	t_obj*	lst;
+	DIR			*dir;
+	t_obj		*lst;
+	t_column	*col;
 
 	if (!(dir = ft_opendir(dirname)))
 		return ;
-	lst = ft_readdir(dir, dirname, sort);
-	show(lst);
+	col = new_column();
+	lst = ft_readdir(dir, dirname, sort, col);
+	show(lst, col);
 	get_dir(lst, sort, show);
 	free_obj(lst);
 }

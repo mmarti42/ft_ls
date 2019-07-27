@@ -3,35 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lshellie <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abartole <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/08 20:10:09 by lshellie          #+#    #+#             */
-/*   Updated: 2019/04/18 20:26:44 by lshellie         ###   ########.fr       */
+/*   Created: 2018/11/22 05:10:00 by abartole          #+#    #+#             */
+/*   Updated: 2018/12/05 22:12:53 by abartole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
-void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
+void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 {
-	char	*ddst;
-	char	*ssrc;
-	char	cc;
+	size_t			i;
+	unsigned char	*riu;
+	unsigned char	*tuk;
 
-	cc = (char)c;
-	ddst = (char *)dst;
-	ssrc = (char *)src;
-	while (n > 0)
+	i = 0;
+	riu = (unsigned char *)dest;
+	tuk = (unsigned char *)src;
+	while (n--)
 	{
-		*ddst = *ssrc;
-		if (*ssrc == cc)
+		riu[i] = tuk[i];
+		if (tuk[i] == (unsigned char)c)
 		{
-			++ddst;
-			return (ddst);
+			return (&riu[i + 1]);
 		}
-		++ddst;
-		++ssrc;
-		--n;
+		i++;
 	}
-	return (0);
+	return (NULL);
 }

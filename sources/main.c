@@ -37,15 +37,15 @@ t_obj		*rec(t_obj *files, char *av)
 	flist = 0;
 	if (!files)
 	{
-		files = new_obj(0, av);
+		files = new_obj(0, av, 0);
 		flist = files;
 	}
 	else
 	{
 		if (g_t)
-			by_time(flist, new_obj(0, av));
+			by_time(flist, new_obj(0, av, 0));
 		else
-			by_name(files, new_obj(0, av));
+			by_name(files, new_obj(0, av, 0));
 		return (files);
 	}
 	return (flist);
@@ -67,7 +67,7 @@ t_dirs		*recdirs(char *str, t_dirs *dirs)
 	return (dirs);
 }
 
-t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *)))
+t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *,t_column*)))
 {
 	struct stat	stbuf;
 	t_obj		*files;
@@ -89,7 +89,7 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *)))
 				dirs = recdirs(argv[endfl], dirs);
 		}
 	}
-	show(files);
+	show(files, 0);
 	return (dirs);
 }
 
@@ -112,7 +112,7 @@ int			main(int argc, char **argv)
 	int		endfl;
 	t_dirs	*dirs;
 	void(*sort)(t_obj*, t_obj*);
-	void(*show)(t_obj*);
+	void(*show)(t_obj*,t_column*);
 	t_dirs* tmp;
 
 	argc = 0;

@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lshellie <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abartole <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/13 16:56:59 by lshellie          #+#    #+#             */
-/*   Updated: 2019/04/13 16:59:50 by lshellie         ###   ########.fr       */
+/*   Created: 2018/11/25 09:01:45 by abartole          #+#    #+#             */
+/*   Updated: 2018/11/30 22:55:27 by abartole         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <unistd.h>
 
 void	ft_putchar(char c)
