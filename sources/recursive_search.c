@@ -59,7 +59,7 @@ void get_dir(t_obj* lst, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_colum
     if (!lst)
         return ;
     get_dir(lst->left, sort, show);
-    if (g_R && lst->type == DT_DIR && ft_strcmp(lst->name, ".")
+    if (lst->type == DT_DIR && ft_strcmp(lst->name, ".")
         && ft_strcmp(lst->name, ".."))
     {
         ft_putstr(lst->path);
@@ -80,6 +80,7 @@ void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_col
 	col = new_column();
 	lst = ft_readdir(dir, dirname, sort, col);
 	show(lst, col);
-	get_dir(lst, sort, show);
+	if (g_R)
+		get_dir(lst, sort, show);
 	free_obj(lst);
 }

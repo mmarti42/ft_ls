@@ -36,6 +36,7 @@ void		get_stats(t_obj* new, t_column *col) ////!!!!!!!!!!!!
     struct stat stbuf;
 
     lstat(new->path, &stbuf);
+
     new->time = stbuf.st_mtimespec.tv_sec;
     if (!g_l)
 		return ;

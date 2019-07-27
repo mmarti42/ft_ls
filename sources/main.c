@@ -27,7 +27,7 @@ int			get_flags(char **av)
 		else
 			return (i);
 	}
-	return (0);
+	return (1);
 }
 
 t_obj		*rec(t_obj *files, char *av)
@@ -72,15 +72,15 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *,t_column*)))
 	struct stat	stbuf;
 	t_obj		*files;
 	t_dirs		*dirs;
+	t_column	*col;
 
+	col = new_column();
 	dirs = 0;
 	files = 0;
-	if (endfl == -1)
-		return (0);
-	while (argv[++endfl])
+	while (argv[endfl])
 	{
 		if (lstat(argv[endfl], &stbuf) < 0)
-			write(1, "No such file or directory\n", 26);
+			ft_printf("%s%s%s\n", "ls: ", argv[endfl], ": No such file or directory");
 		else
 		{
 			if (S_ISDIR(stbuf.st_mode) == 0)
@@ -88,8 +88,9 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *,t_column*)))
 			else
 				dirs = recdirs(argv[endfl], dirs);
 		}
+		endfl++;
 	}
-	show(files, 0);
+	show(files, col);
 	return (dirs);
 }
 
@@ -107,6 +108,24 @@ void free_lst(t_dirs* lst)
 	}
 }
 
+void sort_dirs(t_dirs* dirs)
+{
+	char *tmp;
+
+	if (!dirs)
+		return ;
+	while (dirs->next)
+	{
+		if (ft_strcmp(dirs->dir, dirs->next->dir))
+		{
+			tmp = dirs->dir;
+			dirs->dir = dirs->next->dir;
+			dirs->next->dir = tmp;
+		}
+		dirs = dirs->next;
+	}
+}
+
 int			main(int argc, char **argv)
 {
 	int		endfl;
@@ -115,19 +134,24 @@ int			main(int argc, char **argv)
 	void(*show)(t_obj*,t_column*);
 	t_dirs* tmp;
 
-	argc = 0;
 	endfl = get_flags(argv);
 	get_pointers(&sort, &show);
 	if (endfl < 0)
 		return (-1);
-	dirs = get_files(argv, endfl - 1, show);
-	if (!dirs)
+	dirs = get_files(argv, endfl, show);
+	if (!dirs && !argv[endfl])
 		dirs = recdirs(".", dirs);
+	else
+		sort_dirs(dirs);
 	tmp = dirs;
 	while (dirs)
 	{
+		if (argc - endfl > 1)
+			ft_printf("%s:\n", dirs->dir);
 		search(dirs->dir, sort, show);
 		dirs = dirs->next;
+		if(dirs)
+			write(1, "\n", 1);
 	}
 	free_lst(tmp);
 	return (0);
