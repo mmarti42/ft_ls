@@ -79,6 +79,7 @@ void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_col
 		return ;
 	col = new_column();
 	lst = ft_readdir(dir, dirname, sort, col);
+	ft_printf("total %d\n", col->total);
 	show(lst, col);
 	if (g_R)
 		get_dir(lst, sort, show);

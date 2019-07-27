@@ -31,7 +31,7 @@ char	*ft_namejoin(char *s1, char *s2)
 	return (str);
 }
 
-void		get_stats(t_obj* new, t_column *col) ////!!!!!!!!!!!!
+void		get_stats(t_obj* new, t_column *col)
 {
     struct stat stbuf;
 
@@ -61,7 +61,7 @@ void		get_stats(t_obj* new, t_column *col) ////!!!!!!!!!!!!
 		set_columns(new, col);
 }
 
-t_obj		*new_obj(struct dirent *dirent, char *str, t_column *col) ////!!!!!!!!!!!!!
+t_obj		*new_obj(struct dirent *dirent, char *str, t_column *col)
 {
 	t_obj		*new;
 

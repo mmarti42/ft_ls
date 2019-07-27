@@ -50,7 +50,6 @@ typedef struct			s_object
 {
 	long				time;
 	int					blocks;
-
 	char 				*mod;
 	char 				*links;
 	char 				*master;
@@ -63,9 +62,7 @@ typedef struct			s_object
 	char				*time_day;
 	char				*name;
 	char 				*linked_file;
-
 	char 				*path;
-
 	u_int8_t			type;
 	struct s_object		*left;
 	struct s_object		*right;
@@ -82,6 +79,7 @@ typedef struct			s_column
 	int 				time_year;
 	int 				time_day;
 	int 				name;
+	int 				total;
 }						t_column;
 
 t_obj					*new_obj(struct dirent *dirent, char *str, t_column *col);

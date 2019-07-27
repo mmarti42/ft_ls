@@ -43,4 +43,5 @@ void			set_columns(t_obj *lst, t_column *col)
 		col->time_day = len;
 	if ((len = ft_strlen(lst->name)) > col->name)
 		col->name = len;
+	col->total += lst->blocks;
 }
