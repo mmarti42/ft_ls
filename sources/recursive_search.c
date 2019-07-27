@@ -12,18 +12,18 @@
 
 #include "../headers/ft_ls.h"
 
-static DIR				*ft_opendir(char *str)
+static DIR	*ft_opendir(char *str)
 {
 	DIR		*dir;
 
 	if (!(dir = opendir(str)))
 	{
-	    if (errno == EACCES)
-        {
-	        write(1, "ls: ", 4);
-	        ft_putstr(str);
-	        write(1, ": ", 2);
-        }
+		if (errno == EACCES)
+		{
+			write(1, "ls: ", 4);
+			ft_putstr(str);
+			write(1, ": ", 2);
+		}
 		ft_putstr(strerror(errno));
 		ft_putchar('\n');
 		return (0);
@@ -31,11 +31,12 @@ static DIR				*ft_opendir(char *str)
 	return (dir);
 }
 
-t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*), t_column *col)
+t_obj		*ft_readdir(DIR *dir, char *cur_dir,
+		void (*sort)(t_obj*, t_obj*), t_column *col)
 {
-	struct dirent *dirent;
-	t_obj *lst;
-	t_obj *curr;
+	struct dirent	*dirent;
+	t_obj			*lst;
+	t_obj			*curr;
 
 	lst = 0;
 	while ((dirent = readdir(dir)))
@@ -54,22 +55,24 @@ t_obj *ft_readdir(DIR *dir, char *cur_dir, void(*sort)(t_obj*, t_obj*), t_column
 	return (lst);
 }
 
-void get_dir(t_obj* lst, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_column*))
+void		get_dir(t_obj *lst, void (*sort)(t_obj*, t_obj*),
+		void (*show)(t_obj*, t_column*))
 {
-    if (!lst)
-        return ;
-    get_dir(lst->left, sort, show);
-    if (lst->type == DT_DIR && ft_strcmp(lst->name, ".")
-        && ft_strcmp(lst->name, ".."))
-    {
-        ft_putstr(lst->path);
-        write(1, "\n", 1);
-        search(lst->path, sort, show);
-    }
-    get_dir(lst->right, sort, show);
+	if (!lst)
+		return ;
+	get_dir(lst->left, sort, show);
+	if (lst->type == DT_DIR && ft_strcmp(lst->name, ".")
+		&& ft_strcmp(lst->name, ".."))
+	{
+		ft_putstr(lst->path);
+		write(1, ":\n", 2);
+		search(lst->path, sort, show);
+	}
+	get_dir(lst->right, sort, show);
 }
 
-void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_column*))
+void		search(char *dirname, void (*sort)(t_obj*, t_obj*),
+		void (*show)(t_obj*, t_column*))
 {
 	DIR			*dir;
 	t_obj		*lst;
@@ -79,9 +82,10 @@ void search(char *dirname, void(*sort)(t_obj*, t_obj*), void(*show)(t_obj*,t_col
 		return ;
 	col = new_column();
 	lst = ft_readdir(dir, dirname, sort, col);
-	ft_printf("total %d\n", col->total);
+	if (g_l)
+		ft_printf("total %d\n", col->total);
 	show(lst, col);
-	if (g_R)
+	if (g_rr)
 		get_dir(lst, sort, show);
 	free_obj(lst);
 }

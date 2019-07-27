@@ -12,7 +12,7 @@
 
 #include "../headers/ft_ls.h"
 
-t_column		*new_column()
+t_column		*new_column(void)
 {
 	t_column	*new;
 

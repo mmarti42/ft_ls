@@ -12,11 +12,11 @@
 
 #include "../headers/ft_ls.h"
 
-# define HALF_YEAR 15778463
+#define HALF_YEAR 15778463
 
 void		ft_free(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -27,11 +27,11 @@ void		ft_free(char **str)
 	free(str);
 }
 
-char 		*convert_month(long t)
+char		*convert_month(long t)
 {
-	char 	*str;
-	char 	**tmp;
-	char 	*ttime;
+	char	*str;
+	char	**tmp;
+	char	*ttime;
 
 	ttime = ctime(&t);
 	tmp = ft_strsplit(ttime, ' ');
@@ -39,11 +39,12 @@ char 		*convert_month(long t)
 	ft_free(tmp);
 	return (str);
 }
-char 		*convert_day(long t)
+
+char		*convert_day(long t)
 {
-	char 	*str;
-	char 	**tmp;
-	char 	*ttime;
+	char	*str;
+	char	**tmp;
+	char	*ttime;
 
 	ttime = ctime(&t);
 	tmp = ft_strsplit(ttime, ' ');
@@ -52,10 +53,10 @@ char 		*convert_day(long t)
 	return (str);
 }
 
-char 	*get_year(char **tmp)
+char		*get_year(char **tmp)
 {
 	char	*ret;
-	int 	i;
+	int		i;
 
 	i = 0;
 	ret = ft_strdup(tmp[4]);
@@ -65,27 +66,7 @@ char 	*get_year(char **tmp)
 	return (ret);
 }
 
-char	*cut_noyear(char *tmp)
-{
-	char 	*str;
-	int 	i;
-	int 	j;
-
-	j = 0;
-	i = 0;
-	while (tmp[i] != 0)
-	{
-		if (tmp[i] == ':')
-			++j;
-		if (j == 2)
-			tmp[i] = 0;
-		++i;
-	}
-	str = ft_strdup(tmp);
-	return (str);
-}
-
-char	*convert_year(long t)
+char		*convert_year(long t)
 {
 	char *str;
 	long cur_time;

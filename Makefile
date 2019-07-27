@@ -14,9 +14,9 @@ DIR_SRC = sources/
 
 DIR_HEADER = headers/
 
-SRC = $(addprefix $(DIR_SRC), err.c main.c objects.c recursive_search.c sort.c convert_params.c convert_time.c long_output.c columns.c)
+SRC = $(addprefix $(DIR_SRC), err.c main.c objects.c recursive_search.c sort.c convert_params.c convert_time.c long_output.c columns.c norme.c print.c)
 
-OBJ = err.o main.o objects.o recursive_search.o sort.o convert_params.o convert_time.o long_output.o columns.o
+OBJ = err.o main.o objects.o recursive_search.o sort.o convert_params.o convert_time.o long_output.o columns.o norme.o print.o
 
 HEADER = $(addprefix $(DIR_HEADER), ft_ls.h)
 

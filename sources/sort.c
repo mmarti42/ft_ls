@@ -12,7 +12,7 @@
 
 #include "../headers/ft_ls.h"
 
-int setFlags(char *av)
+int			setflags(char *av)
 {
 	while (*++av)
 	{
@@ -21,7 +21,7 @@ int setFlags(char *av)
 		else if (*av == 'l')
 			g_l = 1;
 		else if (*av == 'R')
-			g_R = 1;
+			g_rr = 1;
 		else if (*av == 'r')
 			g_r = 1;
 		else if (*av == 't')
@@ -37,9 +37,9 @@ int setFlags(char *av)
 	return (0);
 }
 
-void	by_time(t_obj *lbegin, t_obj* lcurr)
+void		by_time(t_obj *lbegin, t_obj *lcurr)
 {
-	t_obj *tmp;
+	t_obj	*tmp;
 
 	while (lbegin)
 	{
@@ -55,7 +55,7 @@ void	by_time(t_obj *lbegin, t_obj* lcurr)
 		tmp->right = lcurr;
 }
 
-void	by_name(t_obj *lbegin, t_obj* lcurr)
+void		by_name(t_obj *lbegin, t_obj *lcurr)
 {
 	t_obj *tmp;
 
@@ -73,16 +73,15 @@ void	by_name(t_obj *lbegin, t_obj* lcurr)
 		tmp->right = lcurr;
 }
 
-void not_sort(t_obj* lbegin, t_obj* lcurr)
+void		not_sort(t_obj *lbegin, t_obj *lcurr)
 {
 	while (lbegin->right)
-	{
 		lbegin = lbegin->right;
-	}
 	lbegin->right = lcurr;
 }
 
-void get_pointers(void(**sort)(t_obj*, t_obj*), void (**show)(t_obj*,t_column*))
+void		get_pointers(void (**sort)(t_obj*, t_obj*),
+		void (**show)(t_obj*, t_column*))
 {
 	if (g_r)
 		*show = &show_objrev;

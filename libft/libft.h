@@ -104,7 +104,7 @@ void			*ft_memset(void *str, int ch, size_t n);
 void			*ft_memccpy(void *dest, const void *src, int c, size_t n);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			ft_bzero(void *str, size_t n);
-char				*ft_strstr_kmp(const char *haystack, const char *needle);
-unsigned int		*ft_zfunc(const char *str);
+char			*ft_strstr_kmp(const char *haystack, const char *needle);
+unsigned int	*ft_zfunc(const char *str);
 
 #endif

@@ -12,10 +12,10 @@
 
 #include "../headers/ft_ls.h"
 
-int error(char c)
+int		error(char c)
 {
-	ft_putstr(badFlag);
+	ft_putstr(BADFLAG);
 	ft_putchar(c);
-	ft_putstr(usage);
+	ft_putstr(USAGE);
 	return (-1);
 }

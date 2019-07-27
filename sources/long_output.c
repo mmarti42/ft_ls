@@ -12,9 +12,9 @@
 
 #include "../headers/ft_ls.h"
 
-char 		*convert_linked_file(char *path)
+char		*convert_linked_file(char *path)
 {
-	char 	*buf;
+	char	*buf;
 
 	if (!(buf = (char *)ft_memalloc(1025)))
 		return (0);
@@ -24,7 +24,7 @@ char 		*convert_linked_file(char *path)
 
 char		*convert_maj(dev_t dev)
 {
-	char *str;
+	char	*str;
 
 	str = ft_itoa(major(dev));
 	return (str);
@@ -32,22 +32,22 @@ char		*convert_maj(dev_t dev)
 
 char		*convert_min(dev_t dev)
 {
-	char *str;
+	char	*str;
 
 	str = ft_itoa(minor(dev));
 	return (str);
 }
 
-char	*convert_perm(unsigned short mod)
+char		*convert_perm(unsigned short mod)
 {
-	char *str;
+	char	*str;
 
 	str = ft_strnew(10);
 	str[0] = (S_ISLNK(mod) == 1 ? 'l' : '-');
 	str[0] = (S_ISBLK(mod) == 1 ? 'b' : str[0]);
 	str[0] = (S_ISDIR(mod) > 0 ? 'd' : str[0]);
 	str[0] = (S_ISCHR(mod) > 0 ? 'c' : str[0]);
-	str[0] = (S_ISFIFO(mod) > 0? 'p' : str[0]);
+	str[0] = (S_ISFIFO(mod) > 0 ? 'p' : str[0]);
 	str[0] = (S_ISSOCK(mod) > 0 ? 's' : str[0]);
 	str[1] = ((mod & S_IRUSR) > 0 ? 'r' : '-');
 	str[2] = ((mod & S_IWUSR) > 0 ? 'w' : '-');

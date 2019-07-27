@@ -16,18 +16,14 @@ int			get_flags(char **av)
 {
 	int i;
 
-	i = 0;
-	while (av[++i])
+	i = 1;
+	while (av[i] && av[i][0] == '-')
 	{
-		if (av[i][0] == '-')
-		{
-			if (setFlags(av[i]) < 0)
-				return (-1);
-		}
-		else
-			return (i);
+		if (setflags(av[i]) < 0)
+			return (-1);
+		i++;
 	}
-	return (1);
+	return (i);
 }
 
 t_obj		*rec(t_obj *files, char *av)
@@ -67,7 +63,8 @@ t_dirs		*recdirs(char *str, t_dirs *dirs)
 	return (dirs);
 }
 
-t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *,t_column*)))
+t_dirs		*get_files(char **argv,
+		int endfl, void (show(t_obj *, t_column*)))
 {
 	struct stat	stbuf;
 	t_obj		*files;
@@ -80,7 +77,8 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *,t_column*)))
 	while (argv[endfl])
 	{
 		if (lstat(argv[endfl], &stbuf) < 0)
-			ft_printf("%s%s%s\n", "ls: ", argv[endfl], ": No such file or directory");
+			ft_printf("%s%s%s\n", "ls: ",
+					argv[endfl], ": No such file or directory");
 		else
 		{
 			if (S_ISDIR(stbuf.st_mode) == 0)
@@ -94,45 +92,13 @@ t_dirs		*get_files(char **argv, int endfl, void(show(t_obj *,t_column*)))
 	return (dirs);
 }
 
-void free_lst(t_dirs* lst)
-{
-	t_dirs* tmp;
-
-	tmp = lst;
-	while (tmp)
-	{
-		tmp = lst->next;
-		free(lst->dir);
-		free(lst);
-		lst = tmp;
-	}
-}
-
-void sort_dirs(t_dirs* dirs)
-{
-	char *tmp;
-
-	if (!dirs)
-		return ;
-	while (dirs->next)
-	{
-		if (ft_strcmp(dirs->dir, dirs->next->dir))
-		{
-			tmp = dirs->dir;
-			dirs->dir = dirs->next->dir;
-			dirs->next->dir = tmp;
-		}
-		dirs = dirs->next;
-	}
-}
-
 int			main(int argc, char **argv)
 {
-	int		endfl;
-	t_dirs	*dirs;
-	void(*sort)(t_obj*, t_obj*);
-	void(*show)(t_obj*,t_column*);
-	t_dirs* tmp;
+	int						endfl;
+	t_dirs					*dirs;
+	void					(*sort)(t_obj*, t_obj*);
+	void					(*show)(t_obj*, t_column*);
+	t_dirs					*tmp;
 
 	endfl = get_flags(argv);
 	get_pointers(&sort, &show);
@@ -150,7 +116,7 @@ int			main(int argc, char **argv)
 			ft_printf("%s:\n", dirs->dir);
 		search(dirs->dir, sort, show);
 		dirs = dirs->next;
-		if(dirs)
+		if (dirs)
 			write(1, "\n", 1);
 	}
 	free_lst(tmp);

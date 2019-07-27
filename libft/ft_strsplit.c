@@ -23,7 +23,8 @@ char	**ft_strsplit(char const *s, char c)
 	k = 0;
 	if (!s)
 		return (NULL);
-	if (!(new = (char **)ft_memalloc(sizeof(char *) * ((ft_count_words(s, c)) + 1))))
+	if (!(new = (char **)ft_memalloc(sizeof(char *)
+			* ((ft_count_words(s, c)) + 1))))
 		return (NULL);
 	while (s[i])
 	{

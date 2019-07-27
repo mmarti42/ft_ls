@@ -16,7 +16,6 @@ char	*invalid_format(char **format, t_printf *flags)
 {
 	(void)format;
 	(void)flags;
-
 	return (0);
 }
 
