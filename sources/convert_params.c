@@ -26,7 +26,9 @@ char	*convert_gid(unsigned int gid)
 	char 			*str;
 
 	tmp = getgrgid(gid);
-	str = ft_strdup(tmp->gr_name);
+	str = 0;
+	if(tmp)
+		str = ft_strdup(tmp->gr_name);
 	return (str);
 }
 
@@ -35,8 +37,10 @@ char	*convert_uid(unsigned int uid)
 	struct passwd	*tmp;
 	char 			*str;
 
+	str = 0;
 	tmp = getpwuid(uid);
-	str = ft_strdup(tmp->pw_name);
+	if (tmp)
+		str = ft_strdup(tmp->pw_name);
 	return (str);
 }
 

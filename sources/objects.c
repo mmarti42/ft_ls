@@ -88,7 +88,7 @@ t_obj		*new_obj(struct dirent *dirent, char *str, t_column *col) ////!!!!!!!!!!!
 
 void	write_long(t_obj *lst, t_column *col)
 {
-	if (col)
+	if (col && col->group)
 	{
 		ft_printf("%s %*s", lst->mod, col->links, lst->links);
 		ft_printf(" %-*s %-*s", col->master, lst->master, col->group, lst->group);
