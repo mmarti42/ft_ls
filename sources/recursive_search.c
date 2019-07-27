@@ -64,7 +64,7 @@ void		get_dir(t_obj *lst, void (*sort)(t_obj*, t_obj*),
 	if (lst->type == DT_DIR && ft_strcmp(lst->name, ".")
 		&& ft_strcmp(lst->name, ".."))
 	{
-		ft_printf("\n%s:", lst->path);
+		ft_printf("\n%s:\n", lst->path);
 		search(lst->path, sort, show);
 	}
 	get_dir(lst->right, sort, show);
