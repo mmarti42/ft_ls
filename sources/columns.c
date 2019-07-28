@@ -37,6 +37,8 @@ void			set_columns(t_obj *lst, t_column *col)
 		col->min = len;
 	if ((len = ft_strlen(lst->size)) > col->size)
 		col->size = len;
+	if ((len = col->maj + col->min) > col->size)
+		col->size = len + 2;
 	if ((len = ft_strlen(lst->time_year)) > col->time_year)
 		col->time_year = len;
 	if ((len = ft_strlen(lst->time_day)) > col->time_day)

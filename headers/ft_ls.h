@@ -110,8 +110,8 @@ char					*convert_year(long t);
 char					*convert_month(long t);
 char					*convert_day(long t);
 char					*cut_noyear(char *tmp);
-void					sort_dirs(t_dirs* dirs);
-void					free_lst(t_dirs* lst);
+void					sort_dirs(t_dirs *dirs);
+void					free_lst(t_dirs *lst);
 void					write_long(t_obj *lst, t_column *col);
 void					write_name(t_obj *lst, t_column *col);
 
