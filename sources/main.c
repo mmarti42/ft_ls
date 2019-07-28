@@ -50,7 +50,9 @@ t_obj		*rec(t_obj *files, char *av, t_column *col)
 t_dirs		*recdirs(char *str, t_dirs *dirs)
 {
 	t_dirs *tmp;
+	t_dirs *first;
 
+	first = dirs;
 	if (!(tmp = (t_dirs *)ft_memalloc(sizeof(t_dirs))))
 		return (0);
 	tmp->dir = strdup(str);
@@ -60,7 +62,7 @@ t_dirs		*recdirs(char *str, t_dirs *dirs)
 	while (dirs->next)
 		dirs = dirs->next;
 	dirs->next = tmp;
-	return (dirs);
+	return (first);
 }
 
 t_dirs		*get_files(char **argv,

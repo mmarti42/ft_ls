@@ -55,18 +55,22 @@ void		free_obj(t_obj *lst)
 void		sort_dirs(t_dirs *dirs)
 {
 	char		*tmp;
+	t_dirs		*first;
 
 	if (!dirs)
 		return ;
+	first = dirs;
 	while (dirs->next)
 	{
-		if (ft_strcmp(dirs->dir, dirs->next->dir))
+		if (ft_strcmp(dirs->dir, dirs->next->dir) > 0)
 		{
 			tmp = dirs->dir;
 			dirs->dir = dirs->next->dir;
 			dirs->next->dir = tmp;
+			dirs = first;
 		}
-		dirs = dirs->next;
+		else
+			dirs = dirs->next;
 	}
 }
 
