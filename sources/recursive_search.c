@@ -88,4 +88,5 @@ void		search(char *dirname, void (*sort)(t_obj*, t_obj*),
 	if (g_rr)
 		get_dir(lst, sort, show);
 	free_obj(lst);
+	free(col);
 }

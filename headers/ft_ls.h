@@ -81,6 +81,15 @@ typedef struct			s_column
 	int					total;
 }						t_column;
 
+typedef	struct			s_variables
+{
+	int					endfl;
+	t_dirs				*dirs;
+	void				(*sort)(t_obj*, t_obj*);
+	void				(*show)(t_obj*, t_column*);
+	t_dirs				*tmp;
+}						t_vars;
+
 t_obj					*new_obj(struct dirent *dirent,
 		char *str, t_column *col);
 void					free_obj(t_obj *lst);
