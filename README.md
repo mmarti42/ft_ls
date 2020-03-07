@@ -22,7 +22,7 @@ $ make
 ### Syntax
 
 ```
-./ft_ls [-l] [-R] [-a] [-r] [-t] args
+./ft_ls [-lRart] args
 ```
 
 ### Options
